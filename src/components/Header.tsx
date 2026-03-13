@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Search, EyeOff } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 
 interface HeaderProps {
@@ -33,13 +34,15 @@ export function Header({ search, onSearchChange }: HeaderProps) {
           text-[0.55rem] tracking-widest uppercase mt-0.5 transition-colors duration-300
           ${isEdu ? "text-edu-text2 font-edu-body tracking-wider" : "text-synth-text2 font-body"}
         `}>
-          {isEdu ? "Learning Games for Students" : "UNBLOCKED · FREE · ALWAYS ONLINE"}
+          {isEdu ? "Learning Games for Students" : "UNLIMITED · FREE · ALWAYS ONLINE"}
         </span>
       </Link>
 
-      {/* Search */}
-      <div className="flex-1 max-w-sm relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm opacity-40 pointer-events-none">🔍</span>
+      {/* Search — absolutely centered in the viewport */}
+      <div className="absolute left-1/2 -translate-x-1/2 w-full max-w-sm px-4">
+        <span className="absolute left-7 top-1/2 -translate-y-1/2 opacity-40 pointer-events-none flex">
+          {isEdu ? "🔍" : <Search size={14} />}
+        </span>
         <input
           type="text"
           placeholder={isEdu ? "Find a learning game..." : "Search games..."}
@@ -55,33 +58,12 @@ export function Header({ search, onSearchChange }: HeaderProps) {
         />
       </div>
 
-      {/* Nav */}
-      <nav className="hidden md:flex gap-0.5 ml-auto">
-        {(isEdu
-          ? ["New", "Popular", "All Games", "Random"]
-          : ["NEW", "HOT", "ALL", "RANDOM"]
-        ).map((label) => (
-          <button
-            key={label}
-            className={`
-              px-3 py-1.5 rounded-md border border-transparent text-xs font-bold tracking-widest transition-all duration-200
-              ${isEdu
-                ? "text-edu-text2 font-edu-body tracking-wide hover:text-edu-accent hover:border-edu-border hover:bg-edu-tag-bg"
-                : "text-synth-text2 font-display hover:text-synth-accent hover:border-synth-border hover:bg-synth-tag-bg"
-              }
-            `}
-          >
-            {label}
-          </button>
-        ))}
-      </nav>
-
       {/* Theme Toggle */}
       <button
         onClick={toggle}
         title="Switch theme"
         className={`
-          flex items-center gap-2 rounded-full pl-1.5 pr-3 py-1.5 border text-xs
+          ml-auto flex items-center gap-2 rounded-full pl-1.5 pr-3 py-1.5 border text-xs
           flex-shrink-0 select-none transition-all duration-200 cursor-pointer
           ${isEdu
             ? "bg-edu-surface2 border-edu-border text-edu-text2 font-edu-body hover:border-edu-accent hover:text-edu-accent"
@@ -102,7 +84,10 @@ export function Header({ search, onSearchChange }: HeaderProps) {
             }
           `} />
         </div>
-        <span>{isEdu ? "🌈 ARCADE MODE" : "🕵️ INCOGNITO"}</span>
+        {isEdu
+          ? <span>🌈 ARCADE MODE</span>
+          : <span className="inline-flex items-center gap-1.5"><EyeOff size={12} /> INCOGNITO</span>
+        }
       </button>
     </header>
   );

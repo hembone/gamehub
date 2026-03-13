@@ -1,4 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
+import { Star, Play } from "lucide-react";
+import { CategoryIcon } from "./CategoryIcon";
 import { useTheme } from "../hooks/useTheme";
 import type { Game } from "../data/games";
 
@@ -30,12 +32,15 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
         }
       `}
     >
-      {/* Floating emoji */}
+      {/* Thumbnail icon */}
       <div className={`
-        flex-shrink-0 text-8xl animate-float
-        ${isEdu ? "" : "drop-shadow-[0_0_18px_rgba(255,0,255,0.55)]"}
+        flex-shrink-0 animate-float
+        ${isEdu ? "text-8xl" : "text-white/80 drop-shadow-[0_0_18px_rgba(255,0,255,0.55)]"}
       `}>
-        {game.emoji}
+        {isEdu
+          ? game.emoji
+          : <CategoryIcon category={game.category} size={80} strokeWidth={1} />
+        }
       </div>
 
       <div className="flex-1 min-w-0">
@@ -43,7 +48,7 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
           block text-[0.58rem] tracking-[0.2em] uppercase mb-1.5 font-bold
           ${isEdu ? "text-edu-accent font-edu-body" : "text-synth-accent font-display"}
         `}>
-          {isEdu ? "⭐ FEATURED GAME" : "⭐ GAME OF THE WEEK"}
+          {isEdu ? "⭐ FEATURED GAME" : <span className="inline-flex items-center gap-1"><Star size={10} fill="currentColor" /> GAME OF THE WEEK</span>}
         </span>
 
         <div className={`
@@ -73,7 +78,7 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
             }
           `}
         >
-          ▶ {isEdu ? "Play Now" : "PLAY NOW"}
+          {isEdu ? "▶ Play Now" : <span className="inline-flex items-center gap-2"><Play size={12} fill="currentColor" /> PLAY NOW</span>}
         </button>
       </div>
     </div>

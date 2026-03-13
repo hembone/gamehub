@@ -212,13 +212,13 @@ export const GAMES: Game[] = [
 
 export const CATEGORIES = [
   { id: "all", synthLabel: "All Games", eduLabel: "All Games" },
-  { id: "action", synthLabel: "⚡ Action", eduLabel: "🔢 Math" },
-  { id: "puzzle", synthLabel: "🧩 Puzzle", eduLabel: "🧩 Puzzles" },
-  { id: "racing", synthLabel: "🏎️ Racing", eduLabel: "🌍 Geography" },
-  { id: "sports", synthLabel: "⚽ Sports", eduLabel: "📖 Reading" },
-  { id: "io", synthLabel: "🌐 .IO Games", eduLabel: "🔬 Science" },
-  { id: "shooter", synthLabel: "🎯 Shooter", eduLabel: "🎨 Art" },
-  { id: "strategy", synthLabel: "♟️ Strategy", eduLabel: "♟️ Logic" },
+  { id: "action", synthLabel: "Action", eduLabel: "🔢 Math" },
+  { id: "puzzle", synthLabel: "Puzzle", eduLabel: "🧩 Puzzles" },
+  { id: "racing", synthLabel: "Racing", eduLabel: "🌍 Geography" },
+  { id: "sports", synthLabel: "Sports", eduLabel: "📖 Reading" },
+  { id: "io", synthLabel: ".IO", eduLabel: "🔬 Science" },
+  { id: "shooter", synthLabel: "Shooter", eduLabel: "🎨 Art" },
+  { id: "strategy", synthLabel: "Strategy", eduLabel: "♟️ Logic" },
 ] as const;
 
 export const FEATURED_SLUG = "snake-reloaded";

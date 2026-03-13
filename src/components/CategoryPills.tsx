@@ -1,5 +1,17 @@
+import { LayoutGrid, Zap, Puzzle, Gauge, Trophy, Globe, Crosshair, Crown } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { CATEGORIES } from "../data/games";
+
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
+  all:      LayoutGrid,
+  action:   Zap,
+  puzzle:   Puzzle,
+  racing:   Gauge,
+  sports:   Trophy,
+  io:       Globe,
+  shooter:  Crosshair,
+  strategy: Crown,
+};
 
 interface CategoryPillsProps {
   active: string;
@@ -33,7 +45,12 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
               }
             `}
           >
-            {isEdu ? cat.eduLabel : cat.synthLabel}
+            {isEdu ? cat.eduLabel : (
+              <span className="inline-flex items-center gap-1.5">
+                {(() => { const Icon = CATEGORY_ICONS[cat.id]; return Icon ? <Icon size={12} strokeWidth={2} /> : null; })()}
+                {cat.synthLabel}
+              </span>
+            )}
           </button>
         );
       })}

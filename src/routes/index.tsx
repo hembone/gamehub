@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
+import { Flame, Sparkles, LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
-import { Ticker } from "../components/Ticker";
 import { FeaturedBanner } from "../components/FeaturedBanner";
 import { CategoryPills } from "../components/CategoryPills";
 import { GameCard } from "../components/GameCard";
@@ -20,16 +20,17 @@ export const Route = createFileRoute("/")({
   component: IndexPage,
 });
 
-function SectionHeader({ title, isEdu, showSeeAll }: { title: string; isEdu: boolean; showSeeAll?: boolean }) {
+function SectionHeader({ title, icon, isEdu, showSeeAll }: { title: string; icon?: React.ReactNode; isEdu: boolean; showSeeAll?: boolean }) {
   return (
     <div className="flex items-center gap-3 mb-4">
       <span className={`
-        font-bold whitespace-nowrap tracking-widest uppercase
+        inline-flex items-center gap-1.5 font-bold whitespace-nowrap tracking-widest uppercase
         ${isEdu
           ? "text-edu-accent font-edu-display text-lg tracking-wide"
           : "text-synth-text font-display text-[0.9rem]"
         }
       `}>
+        {!isEdu && icon}
         {title}
       </span>
       <div className={`
@@ -86,7 +87,6 @@ function IndexPage() {
       />
 
       <Header search={search} onSearchChange={setSearch} />
-      <Ticker />
 
       {/* Leaderboard ad */}
       <AdSlot format="leaderboard" slotId={AD_SLOT_LEADERBOARD} clientId={ADSENSE_CLIENT} />
@@ -100,16 +100,8 @@ function IndexPage() {
             : "font-display tracking-wide bg-gradient-to-b from-white via-[#ff99ff] to-[#cc44ff] text-gradient-clip drop-shadow-[0_0_20px_rgba(255,0,255,0.35)]"
           }
         `}>
-          {isEdu ? "Learn. Explore. Play!" : "PLAY ANYTHING.\nBLOCKED BY NOBODY."}
+          {isEdu ? "Learn. Explore. Play!" : "PLAY ANYTHING.\nANYTIME."}
         </h1>
-        <p className={`
-          text-sm max-w-lg mx-auto leading-relaxed
-          ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
-        `}>
-          {isEdu
-            ? "Discover fun educational games that make learning exciting. Thousands of brain-boosting activities!"
-            : "Hundreds of free unblocked games, always online, no login required. Just click and play."}
-        </p>
       </div>
 
       <CategoryPills active={activeCategory} onChange={setActiveCategory} />
@@ -150,7 +142,7 @@ function IndexPage() {
               <>
                 {hotGames.length > 0 && (
                   <section className="mb-10">
-                    <SectionHeader title={isEdu ? "⭐ Most Popular" : "🔥 HOT RIGHT NOW"} isEdu={isEdu} showSeeAll />
+                    <SectionHeader title={isEdu ? "⭐ Most Popular" : "HOT RIGHT NOW"} icon={<Flame size={14} />} isEdu={isEdu} showSeeAll />
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
                       {hotGames.map((game, i) => (
                         <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 50}ms` }} />
@@ -161,7 +153,7 @@ function IndexPage() {
 
                 {newGames.length > 0 && (
                   <section className="mb-10">
-                    <SectionHeader title={isEdu ? "🆕 Just Added" : "🆕 NEWLY ADDED"} isEdu={isEdu} showSeeAll />
+                    <SectionHeader title={isEdu ? "🆕 Just Added" : "NEWLY ADDED"} icon={<Sparkles size={14} />} isEdu={isEdu} showSeeAll />
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
                       {newGames.map((game, i) => (
                         <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 50}ms` }} />
@@ -171,7 +163,7 @@ function IndexPage() {
                 )}
 
                 <section className="mb-10">
-                  <SectionHeader title={isEdu ? "🎮 All Games" : "👾 ALL GAMES"} isEdu={isEdu} />
+                  <SectionHeader title={isEdu ? "🎮 All Games" : "ALL GAMES"} icon={<LayoutGrid size={14} />} isEdu={isEdu} />
                   <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
                     {GAMES.map((game, i) => (
                       <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 40}ms` }} />
@@ -222,7 +214,7 @@ function IndexPage() {
         </div>
       </footer>
 
-      <Outlet />
-    </>
-  );
-}
+        <Outlet />
+      </>
+    );
+  }
