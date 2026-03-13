@@ -32,15 +32,20 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
         }
       `}
     >
-      {/* Thumbnail icon */}
+      {/* Thumbnail */}
       <div className={`
-        flex-shrink-0 animate-float
-        ${isEdu ? "text-8xl" : "text-white/80 drop-shadow-[0_0_18px_rgba(255,0,255,0.55)]"}
+        flex-shrink-0 animate-float w-32 h-32 rounded-xl overflow-hidden
+        ${isEdu ? "text-8xl flex items-center justify-center" : "shadow-[0_0_30px_rgba(255,0,255,0.4)]"}
       `}>
-        {isEdu
-          ? game.emoji
-          : <CategoryIcon category={game.category} size={80} strokeWidth={1} />
-        }
+        {game.thumbImage ? (
+          <img src={game.thumbImage} alt={game.title} className="w-full h-full object-cover" />
+        ) : isEdu ? (
+          game.emoji
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-white/80" style={{ background: game.thumbGradient }}>
+            <CategoryIcon category={game.category} size={64} strokeWidth={1} />
+          </div>
+        )}
       </div>
 
       <div className="flex-1 min-w-0">

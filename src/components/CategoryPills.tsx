@@ -1,4 +1,4 @@
-import { LayoutGrid, Zap, Puzzle, Gauge, Trophy, Globe, Crosshair, Crown } from "lucide-react";
+import { LayoutGrid, Zap, Puzzle, Gauge, Trophy, Globe, Crosshair, Crown, Gamepad2, Music, Swords } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { CATEGORIES } from "../data/games";
 
@@ -11,6 +11,9 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ size?: number; stroke
   io:       Globe,
   shooter:  Crosshair,
   strategy: Crown,
+  rpg:      Swords,
+  classic:  Gamepad2,
+  music:    Music,
 };
 
 interface CategoryPillsProps {
