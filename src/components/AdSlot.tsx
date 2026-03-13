@@ -33,7 +33,6 @@ export function AdSlot({ format, slotId, clientId = "ca-pub-XXXXXXXXXXXXXXXX" }:
     }
   }, []);
 
-  // Leaderboard: full-width bar between ticker and hero
   const wrapperClass = format === "leaderboard"
     ? `
         hidden md:flex w-full justify-center items-center py-2 px-6 border-b z-10 relative transition-all duration-300

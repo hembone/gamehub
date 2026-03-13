@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { X, Maximize2 } from "lucide-react";
+import { CategoryIcon } from "./CategoryIcon";
 import { useTheme } from "../hooks/useTheme";
 import type { Game } from "../data/games";
 
@@ -53,7 +55,10 @@ export function GameModal({ game }: GameModalProps) {
           flex items-center gap-4 px-6 py-4 flex-shrink-0 border-b
           ${isEdu ? "border-edu-border" : "border-synth-border"}
         `}>
-          <span className="text-4xl">{game.emoji}</span>
+          {isEdu
+            ? <span className="text-4xl">{game.emoji}</span>
+            : <CategoryIcon category={game.category} size={32} className="text-synth-text2 flex-shrink-0" strokeWidth={1.5} />
+          }
           <div className="flex-1 min-w-0">
             <div className={`
               font-black text-lg tracking-wide leading-tight truncate
@@ -82,7 +87,7 @@ export function GameModal({ game }: GameModalProps) {
               }
             `}
           >
-            ✕
+            {isEdu ? "✕" : <X size={16} />}
           </button>
         </div>
 
@@ -124,7 +129,7 @@ export function GameModal({ game }: GameModalProps) {
                 }
               `}
             >
-              ⛶ FULLSCREEN
+              {isEdu ? "⛶ FULLSCREEN" : <span className="inline-flex items-center gap-1.5"><Maximize2 size={12} /> FULLSCREEN</span>}
             </a>
             <button
               onClick={close}
@@ -136,7 +141,7 @@ export function GameModal({ game }: GameModalProps) {
                 }
               `}
             >
-              ✕ {isEdu ? "Close" : "CLOSE"}
+              {isEdu ? "✕ Close" : <span className="inline-flex items-center gap-1.5"><X size={12} /> CLOSE</span>}
             </button>
           </div>
         </div>

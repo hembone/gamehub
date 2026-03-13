@@ -7,7 +7,7 @@ function AppShell() {
   const { isEdu } = useTheme()
   return (
     <div className={`
-      min-h-screen transition-colors duration-400 overflow-x-hidden
+      min-h-screen transition-colors duration-400
       ${isEdu ? 'bg-edu-bg text-edu-text' : 'bg-synth-bg text-synth-text'}
     `}>
       <Outlet />
@@ -36,7 +36,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Arcade Void — Unblocked Games' },
+      { title: 'Arcade Void — Free Games' },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },

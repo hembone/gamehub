@@ -1,3 +1,5 @@
+import { Play } from "lucide-react";
+import { CategoryIcon } from "./CategoryIcon";
 import { useTheme } from "../hooks/useTheme";
 import type { Game } from "../data/games";
 
@@ -47,7 +49,10 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
         className="relative w-full aspect-[4/3] flex items-center justify-center text-5xl overflow-hidden"
         style={{ background: game.thumbGradient }}
       >
-        {game.emoji}
+        {isEdu
+          ? <span className="text-5xl">{game.emoji}</span>
+          : <CategoryIcon category={game.category} size={44} className="text-white/70" strokeWidth={1.25} />
+        }
 
         {/* Badge */}
         {game.badge && (
@@ -63,8 +68,8 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
         )}
 
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          ▶
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          {isEdu ? <span className="text-4xl">▶</span> : <Play size={36} className="text-white" fill="white" />}
         </div>
       </div>
 
