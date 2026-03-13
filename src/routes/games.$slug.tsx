@@ -1,11 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { GameModal } from "../components/GameModal";
-import { loadGames } from "../data/gamesLoader";
+import { GAMES } from "../data/games";
 
 export const Route = createFileRoute("/games/$slug")({
-  loader: async ({ params }) => {
-    const games = await loadGames();
-    const game = games.find((g) => g.slug === params.slug);
+  loader: ({ params }) => {
+    const game = GAMES.find((g) => g.slug === params.slug);
     if (!game) throw notFound();
     return { game };
   },

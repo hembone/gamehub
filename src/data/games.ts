@@ -36,8 +36,6 @@ export interface GameRaw {
   description: string;
 }
 
-export const GAMES_API_URL = "https://www.onlinegames.io/media/plugins/genGames/embed.json";
-
 export const FEATURED_SLUG = "real-flight-simulator";
 
 const CATEGORY_GRADIENTS: Record<GameCategory, string> = {
@@ -104,7 +102,7 @@ function toSlug(title: string): string {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-export function transformGames(raw: GameRaw[]): Game[] {
+function transformGames(raw: GameRaw[]): Game[] {
   return raw.map((r, i) => {
     const category = deriveCategory(r.tags);
     return {
@@ -120,6 +118,9 @@ export function transformGames(raw: GameRaw[]): Game[] {
     };
   });
 }
+
+import rawGames from "./gamesRaw.json";
+export const GAMES: Game[] = transformGames(rawGames as GameRaw[]);
 
 export const CATEGORIES = [
   { id: "all",      synthLabel: "All Games", eduLabel: "All Games"    },
