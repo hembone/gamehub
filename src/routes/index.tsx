@@ -7,8 +7,7 @@ import { CategoryPills } from "../components/CategoryPills";
 import { GameCard } from "../components/GameCard";
 import { AdSlot } from "../components/AdSlot";
 import { useTheme } from "../hooks/useTheme";
-import { FEATURED_SLUG } from "../data/games";
-import { loadGames } from "../data/gamesLoader";
+import { GAMES, FEATURED_SLUG } from "../data/games";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
 const ADSENSE_CLIENT    = "ca-pub-XXXXXXXXXXXXXXXX";
@@ -18,7 +17,6 @@ const AD_SLOT_SIDEBAR_MID = "3333333333";
 // ─────────────────────────────────────────────────────────────────────────
 
 export const Route = createFileRoute("/")({
-  loader: () => loadGames(),
   component: IndexPage,
 });
 
@@ -55,16 +53,15 @@ function SectionHeader({ title, icon, isEdu, showSeeAll }: { title: string; icon
 }
 
 function IndexPage() {
-  const games = Route.useLoaderData();
   const navigate = useNavigate();
   const { isEdu } = useTheme();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const featuredGame = games.find((g) => g.slug === FEATURED_SLUG) ?? games[0];
+  const featuredGame = GAMES.find((g) => g.slug === FEATURED_SLUG) ?? GAMES[0];
 
   const filteredGames = useMemo(() => {
-    return games.filter((game) => {
+    return GAMES.filter((game) => {
       const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
       const matchesSearch = title.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === "all" || game.category === activeCategory;
@@ -107,10 +104,10 @@ function IndexPage() {
         </h1>
       </div>
 
-      <CategoryPills active={activeCategory} onChange={setActiveCategory} />
+      <main className="relative z-10 px-6 pb-16">
+        {!showAll && <div className="max-w-[1200px] mx-auto"><FeaturedBanner game={featuredGame} /></div>}
 
-      <main className="relative z-10 max-w-[1280px] mx-auto px-6 pb-16">
-        {!showAll && <FeaturedBanner game={featuredGame} />}
+        <CategoryPills active={activeCategory} onChange={setActiveCategory} />
 
         {/* Content + Sidebar grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
@@ -168,7 +165,7 @@ function IndexPage() {
                 <section className="mb-10">
                   <SectionHeader title={isEdu ? "🎮 All Games" : "ALL GAMES"} icon={<LayoutGrid size={14} />} isEdu={isEdu} />
                   <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
-                    {games.map((game, i) => (
+                    {GAMES.map((game, i) => (
                       <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 40}ms` }} />
                     ))}
                   </div>

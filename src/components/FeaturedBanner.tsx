@@ -67,7 +67,7 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
         </div>
 
         <p className={`
-          text-sm mb-5 leading-relaxed max-w-lg
+          text-sm mb-5 leading-relaxed
           ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
         `}>
           {description}
