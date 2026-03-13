@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { X, Maximize2 } from "lucide-react";
 import { CategoryIcon } from "./CategoryIcon";
@@ -17,6 +17,8 @@ export function GameModal({ game }: GameModalProps) {
   const description = isEdu && game.eduDescription ? game.eduDescription : game.description;
   const category = isEdu && game.eduCategory ? game.eduCategory : game.category;
 
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [expanded, setExpanded] = useState(false);
   const close = () => navigate({ to: "/" });
 
   useEffect(() => {
@@ -43,7 +45,8 @@ export function GameModal({ game }: GameModalProps) {
         aria-modal="true"
         aria-label={title}
         className={`
-          w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden rounded-2xl border animate-slide-up
+          flex flex-col overflow-hidden border animate-slide-up transition-all duration-300
+          ${expanded ? "fixed inset-0 rounded-none z-[600]" : "w-full max-w-4xl max-h-[90vh] rounded-2xl"}
           ${isEdu
             ? "bg-edu-surface border-edu-border shadow-[0_20px_60px_rgba(66,153,225,0.2),0_40px_80px_rgba(26,32,44,0.13)]"
             : "bg-synth-surface border-synth-border shadow-[0_0_60px_rgba(255,0,255,0.2),0_40px_80px_rgba(0,0,0,0.55)]"
@@ -97,6 +100,7 @@ export function GameModal({ game }: GameModalProps) {
           ${isEdu ? "bg-edu-bg" : "bg-black"}
         `}>
           <iframe
+            ref={iframeRef}
             className="w-full h-full min-h-[480px] block border-none"
             src={game.iframeUrl}
             title={title}
@@ -117,10 +121,8 @@ export function GameModal({ game }: GameModalProps) {
             {description}
           </p>
           <div className="flex gap-2 flex-shrink-0">
-            <a
-              href={game.iframeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setExpanded(v => !v)}
               className={`
                 inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold border rounded-lg cursor-pointer transition-all duration-200
                 ${isEdu
@@ -130,7 +132,7 @@ export function GameModal({ game }: GameModalProps) {
               `}
             >
               {isEdu ? "⛶ FULLSCREEN" : <span className="inline-flex items-center gap-1.5"><Maximize2 size={12} /> FULLSCREEN</span>}
-            </a>
+            </button>
             <button
               onClick={close}
               className={`
