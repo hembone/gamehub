@@ -7,7 +7,8 @@ import { CategoryPills } from "../components/CategoryPills";
 import { GameCard } from "../components/GameCard";
 import { AdSlot } from "../components/AdSlot";
 import { useTheme } from "../hooks/useTheme";
-import { GAMES, FEATURED_SLUG } from "../data/games";
+import { FEATURED_SLUG } from "../data/games";
+import { loadGames } from "../data/gamesLoader";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
 const ADSENSE_CLIENT    = "ca-pub-XXXXXXXXXXXXXXXX";
@@ -17,6 +18,7 @@ const AD_SLOT_SIDEBAR_MID = "3333333333";
 // ─────────────────────────────────────────────────────────────────────────
 
 export const Route = createFileRoute("/")({
+  loader: () => loadGames(),
   component: IndexPage,
 });
 
@@ -53,15 +55,16 @@ function SectionHeader({ title, icon, isEdu, showSeeAll }: { title: string; icon
 }
 
 function IndexPage() {
+  const games = Route.useLoaderData();
   const navigate = useNavigate();
   const { isEdu } = useTheme();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const featuredGame = GAMES.find((g) => g.slug === FEATURED_SLUG)!;
+  const featuredGame = games.find((g) => g.slug === FEATURED_SLUG) ?? games[0];
 
   const filteredGames = useMemo(() => {
-    return GAMES.filter((game) => {
+    return games.filter((game) => {
       const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
       const matchesSearch = title.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === "all" || game.category === activeCategory;
@@ -165,7 +168,7 @@ function IndexPage() {
                 <section className="mb-10">
                   <SectionHeader title={isEdu ? "🎮 All Games" : "ALL GAMES"} icon={<LayoutGrid size={14} />} isEdu={isEdu} />
                   <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
-                    {GAMES.map((game, i) => (
+                    {games.map((game, i) => (
                       <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 40}ms` }} />
                     ))}
                   </div>

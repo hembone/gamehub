@@ -1,5 +1,5 @@
 import {
-  Zap, Puzzle, Gauge, Trophy, Globe, Crosshair, Crown, Gamepad2, Music, Sword,
+  Zap, Puzzle, Gauge, Trophy, Globe, Crosshair, Crown, Gamepad2, Music, Sword, Swords,
 } from "lucide-react";
 import type { GameCategory } from "../data/games";
 
@@ -13,7 +13,7 @@ const ICON_MAP: Record<GameCategory, React.ComponentType<{ size?: number; classN
   strategy: Crown,
   classic:  Gamepad2,
   music:    Music,
-  rpg:      Sword,
+  rpg:      Swords,
 };
 
 interface CategoryIconProps {

@@ -46,13 +46,21 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
     >
       {/* Thumbnail */}
       <div
-        className="relative w-full aspect-[4/3] flex items-center justify-center text-5xl overflow-hidden"
+        className="relative w-full aspect-[4/3] flex items-center justify-center overflow-hidden"
         style={{ background: game.thumbGradient }}
       >
-        {isEdu
-          ? <span className="text-5xl">{game.emoji}</span>
-          : <CategoryIcon category={game.category} size={44} className="text-white/70" strokeWidth={1.25} />
-        }
+        {game.thumbImage ? (
+          <img
+            src={game.thumbImage}
+            alt={title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : isEdu ? (
+          <span className="text-5xl">{game.emoji}</span>
+        ) : (
+          <CategoryIcon category={game.category} size={44} className="text-white/70" strokeWidth={1.25} />
+        )}
 
         {/* Badge */}
         {game.badge && (
