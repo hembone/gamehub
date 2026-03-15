@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useTheme } from "../hooks/useTheme";
 
-export type AdFormat = "leaderboard" | "sidebar-top" | "sidebar-mid";
+export type AdFormat = "leaderboard" | "sidebar-top" | "sidebar-mid" | "skyscraper";
 
 interface AdSlotProps {
   format: AdFormat;
@@ -13,6 +13,7 @@ const AD_DIMENSIONS: Record<AdFormat, { width: number; height: number; label: st
   leaderboard:   { width: 728, height: 90,  label: "Leaderboard (728×90)" },
   "sidebar-top": { width: 300, height: 250, label: "Medium Rectangle (300×250)" },
   "sidebar-mid": { width: 300, height: 600, label: "Half Page (300×600)" },
+  "skyscraper":  { width: 160, height: 600, label: "Wide Skyscraper (160×600)" },
 };
 
 // Flip to true once you have real AdSense IDs

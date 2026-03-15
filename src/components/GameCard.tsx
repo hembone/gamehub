@@ -53,6 +53,8 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
           <img
             src={game.thumbImage}
             alt={title}
+            width={200}
+            height={150}
             className="w-full h-full object-cover"
             loading="lazy"
           />
@@ -62,18 +64,6 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
           <CategoryIcon category={game.category} size={44} className="text-white/70" strokeWidth={1.25} />
         )}
 
-        {/* Badge */}
-        {game.badge && (
-          <span className={`
-            absolute top-2 left-2 z-10 text-white text-[0.5rem] font-bold tracking-widest uppercase px-2 py-0.5
-            ${isEdu
-              ? `${BADGE_STYLES[game.badge].edu} rounded-lg font-edu-body`
-              : `${BADGE_STYLES[game.badge].synth} rounded font-display`
-            }
-          `}>
-            {BADGE_STYLES[game.badge].label}
-          </span>
-        )}
 
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
