@@ -91,9 +91,9 @@ function IndexPage() {
       <AdSlot format="leaderboard" slotId={AD_SLOT_LEADERBOARD} clientId={ADSENSE_CLIENT} />
 
       {/* Hero */}
-      <div className="relative z-10 text-center px-6 pt-12 pb-8">
+      <div className="relative z-10 text-center px-6 pt-6 pb-4 sm:pt-12 sm:pb-8">
         <h1 className={`
-          font-black leading-tight mb-3 text-[clamp(1.8rem,4.5vw,3.5rem)] transition-all duration-300
+          font-black leading-tight mb-3 text-[clamp(1.2rem,4.5vw,3.5rem)] transition-all duration-300
           ${isEdu
             ? "text-edu-accent font-edu-display"
             : "font-display tracking-wide bg-gradient-to-b from-white via-[#ff99ff] to-[#cc44ff] text-gradient-clip drop-shadow-[0_0_20px_rgba(255,0,255,0.35)]"
@@ -104,7 +104,7 @@ function IndexPage() {
       </div>
 
       <main className="relative z-10 px-6 pb-16">
-        {!isFiltered && <div className="max-w-[1200px] mx-auto"><FeaturedBanner game={featuredGame} /></div>}
+        {!isFiltered && <div className="hidden sm:block max-w-[1200px] mx-auto"><FeaturedBanner game={featuredGame} /></div>}
 
         <CategoryPills active={activeCategory} onChange={setActiveCategory} />
 

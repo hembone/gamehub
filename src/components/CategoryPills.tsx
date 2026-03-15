@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LayoutGrid, Zap, Puzzle, Layers, CreditCard, Grid2x2, Gauge, Crosshair, Crown, Trophy } from "lucide-react";
+import { LayoutGrid, Zap, Puzzle, Layers, CreditCard, Grid2x2, Gauge, Crosshair, Crown, Trophy, ChevronDown } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { CATEGORIES } from "../data/games";
 
@@ -26,6 +26,9 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
   const { isEdu } = useTheme();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [isStuck, setIsStuck] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const activeLabel = CATEGORIES.find(c => c.id === active)?.[isEdu ? "eduLabel" : "synthLabel"] ?? "All";
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -43,8 +46,70 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
       {/* Sentinel — sits just above the sticky bar; when it leaves viewport the bar is stuck */}
       <div ref={sentinelRef} className="h-px" />
 
+      {/* Mobile: custom dropdown (native <select> mispositions due to overflow-x:clip on page) */}
       <div className={`
-        flex justify-center flex-wrap gap-2 px-6 py-4 sticky top-[56px] z-40
+        sm:hidden px-6 py-3 sticky top-[56px] z-40 transition-colors duration-300
+        ${isStuck
+          ? isEdu ? "bg-[rgba(247,250,252,0.95)]" : "bg-[rgba(13,0,21,0.92)]"
+          : "bg-transparent"
+        }
+      `}>
+        <div className="relative">
+          <button
+            onClick={() => setDropdownOpen(o => !o)}
+            className={`
+              w-full flex items-center justify-between px-4 py-2 border text-xs font-bold cursor-pointer
+              transition-all duration-200 outline-none
+              ${isEdu
+                ? "rounded-xl font-edu-body bg-edu-tag-bg text-edu-tag-color border-edu-border"
+                : "rounded-lg font-display tracking-widest uppercase bg-synth-tag-bg text-synth-tag-color border-synth-border"
+              }
+            `}
+          >
+            <span>{activeLabel}</span>
+            <ChevronDown
+              size={14}
+              className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {dropdownOpen && (
+            <div className={`
+              absolute top-full left-0 right-0 mt-1 border rounded-lg overflow-hidden z-50 shadow-lg
+              ${isEdu
+                ? "bg-edu-surface border-edu-border"
+                : "bg-synth-surface border-synth-border shadow-[0_4px_24px_rgba(255,0,255,0.15)]"
+              }
+            `}>
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => { onChange(cat.id); setDropdownOpen(false); }}
+                  className={`
+                    w-full text-left px-4 py-2.5 text-xs font-bold transition-colors duration-150 cursor-pointer
+                    ${isEdu
+                      ? `font-edu-body ${active === cat.id
+                          ? "bg-edu-accent text-white"
+                          : "text-edu-text2 hover:bg-edu-tag-bg"
+                        }`
+                      : `font-display tracking-widest uppercase ${active === cat.id
+                          ? "bg-synth-accent text-white"
+                          : "text-synth-text2 hover:bg-synth-surface2"
+                        }`
+                    }
+                  `}
+                >
+                  {isEdu ? cat.eduLabel : cat.synthLabel}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop: pills — with backdrop blur */}
+      <div className={`
+        hidden sm:flex justify-center flex-wrap gap-2 px-6 py-3 sticky top-[56px] z-40
         transition-[background,backdrop-filter] duration-300
         ${isStuck
           ? isEdu
