@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesSlugRouteImport } from './routes/games.$slug'
+import { Route as CategoryCatRouteImport } from './routes/category.$cat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const GamesSlugRoute = GamesSlugRouteImport.update({
   path: '/games/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoryCatRoute = CategoryCatRouteImport.update({
+  id: '/category/$cat',
+  path: '/category/$cat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/category/$cat': typeof CategoryCatRoute
   '/games/$slug': typeof GamesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/category/$cat': typeof CategoryCatRoute
   '/games/$slug': typeof GamesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/category/$cat': typeof CategoryCatRoute
   '/games/$slug': typeof GamesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/games/$slug'
+  fullPaths: '/' | '/category/$cat' | '/games/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/games/$slug'
-  id: '__root__' | '/' | '/games/$slug'
+  to: '/' | '/category/$cat' | '/games/$slug'
+  id: '__root__' | '/' | '/category/$cat' | '/games/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CategoryCatRoute: typeof CategoryCatRoute
   GamesSlugRoute: typeof GamesSlugRoute
 }
 
@@ -65,11 +75,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/category/$cat': {
+      id: '/category/$cat'
+      path: '/category/$cat'
+      fullPath: '/category/$cat'
+      preLoaderRoute: typeof CategoryCatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CategoryCatRoute: CategoryCatRoute,
   GamesSlugRoute: GamesSlugRoute,
 }
 export const routeTree = rootRouteImport

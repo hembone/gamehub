@@ -1,13 +1,14 @@
 import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
 import React, { useState, useMemo } from "react";
-import { Flame, Sparkles, LayoutGrid } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
 import { FeaturedBanner } from "../components/FeaturedBanner";
 import { CategoryPills } from "../components/CategoryPills";
-import { GameCard } from "../components/GameCard";
+import { GameGrid } from "../components/GameGrid";
 import { AdSlot } from "../components/AdSlot";
+import { BackToTop } from "../components/BackToTop";
 import { useTheme } from "../hooks/useTheme";
-import { GAMES, FEATURED_SLUG } from "../data/games";
+import { GAMES } from "../data/games";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
 const ADSENSE_CLIENT    = "ca-pub-XXXXXXXXXXXXXXXX";
@@ -58,7 +59,7 @@ function IndexPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const featuredGame = GAMES.find((g) => g.slug === FEATURED_SLUG) ?? GAMES[0];
+  const featuredGame = useMemo(() => GAMES[Math.floor(Math.random() * GAMES.length)], []);
 
   const filteredGames = useMemo(() => {
     return GAMES.filter((game) => {
@@ -69,9 +70,7 @@ function IndexPage() {
     });
   }, [search, activeCategory, isEdu]);
 
-  const hotGames = filteredGames.filter((g) => g.badge === "hot" || g.badge === "popular");
-  const newGames = filteredGames.filter((g) => g.badge === "new");
-  const showAll = search.length > 0 || activeCategory !== "all";
+  const isFiltered = search.length > 0 || activeCategory !== "all";
 
   const openGame = (slug: string) => navigate({ to: "/games/$slug", params: { slug } });
 
@@ -105,7 +104,7 @@ function IndexPage() {
       </div>
 
       <main className="relative z-10 px-6 pb-16">
-        {!showAll && <div className="max-w-[1200px] mx-auto"><FeaturedBanner game={featuredGame} /></div>}
+        {!isFiltered && <div className="max-w-[1200px] mx-auto"><FeaturedBanner game={featuredGame} /></div>}
 
         <CategoryPills active={activeCategory} onChange={setActiveCategory} />
 
@@ -114,64 +113,26 @@ function IndexPage() {
 
           {/* Main column */}
           <div>
-            {showAll ? (
-              <section className="mb-10">
-                <SectionHeader
-                  title={`${filteredGames.length} ${isEdu ? "Games Found" : "GAMES FOUND"}`}
-                  isEdu={isEdu}
-                />
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
-                  {filteredGames.length === 0 ? (
-                    <div className={`
-                      col-span-full text-center py-12 text-sm
-                      ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
-                    `}>
-                      {isEdu ? "😕 No games found. Try a different search!" : "NO RESULTS FOUND. TRY ANOTHER SEARCH."}
-                    </div>
-                  ) : filteredGames.map((game, i) => (
-                    <GameCard
-                      key={game.slug}
-                      game={game}
-                      onClick={() => openGame(game.slug)}
-                      style={{ animationDelay: `${i * 50}ms` }}
-                    />
-                  ))}
+            <section className="mb-10">
+              <SectionHeader
+                title={isFiltered
+                  ? `${filteredGames.length} ${isEdu ? "Games Found" : "GAMES FOUND"}`
+                  : isEdu ? "🎮 All Games" : "ALL GAMES"
+                }
+                icon={!isFiltered ? <LayoutGrid size={14} /> : undefined}
+                isEdu={isEdu}
+              />
+              {filteredGames.length === 0 ? (
+                <div className={`
+                  text-center py-12 text-sm
+                  ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
+                `}>
+                  {isEdu ? "😕 No games found. Try a different search!" : "NO RESULTS FOUND. TRY ANOTHER SEARCH."}
                 </div>
-              </section>
-            ) : (
-              <>
-                {hotGames.length > 0 && (
-                  <section className="mb-10">
-                    <SectionHeader title={isEdu ? "⭐ Most Popular" : "HOT RIGHT NOW"} icon={<Flame size={14} />} isEdu={isEdu} showSeeAll />
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
-                      {hotGames.map((game, i) => (
-                        <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 50}ms` }} />
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {newGames.length > 0 && (
-                  <section className="mb-10">
-                    <SectionHeader title={isEdu ? "🆕 Just Added" : "NEWLY ADDED"} icon={<Sparkles size={14} />} isEdu={isEdu} showSeeAll />
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
-                      {newGames.map((game, i) => (
-                        <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 50}ms` }} />
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                <section className="mb-10">
-                  <SectionHeader title={isEdu ? "🎮 All Games" : "ALL GAMES"} icon={<LayoutGrid size={14} />} isEdu={isEdu} />
-                  <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
-                    {GAMES.map((game, i) => (
-                      <GameCard key={game.slug} game={game} onClick={() => openGame(game.slug)} style={{ animationDelay: `${i * 40}ms` }} />
-                    ))}
-                  </div>
-                </section>
-              </>
-            )}
+              ) : (
+                <GameGrid games={filteredGames} onOpen={openGame} />
+              )}
+            </section>
           </div>
 
           {/* Sticky sidebar */}
@@ -197,12 +158,12 @@ function IndexPage() {
         </span>
         <div className="flex gap-5">
           {(isEdu
-            ? ["Safety", "Privacy", "Teachers", "Suggest a Game"]
-            : ["DMCA", "PRIVACY", "CONTACT", "REQUEST A GAME"]
-          ).map((label) => (
+            ? [["Safety", "/safety"], ["Privacy", "/privacy"], ["Teachers", "/teachers"], ["Suggest a Game", "/suggest"]]
+            : [["DMCA", "/dmca"], ["PRIVACY", "/privacy"], ["CONTACT", "/contact"], ["REQUEST A GAME", "/suggest"]]
+          ).map(([label, href]) => (
             <a
               key={label}
-              href="#"
+              href={href}
               className={`
                 no-underline transition-colors duration-200 hover:opacity-100
                 ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}
@@ -214,6 +175,7 @@ function IndexPage() {
         </div>
       </footer>
 
+        <BackToTop />
         <Outlet />
       </>
     );

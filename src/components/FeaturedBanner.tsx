@@ -38,7 +38,7 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
         ${isEdu ? "text-8xl flex items-center justify-center" : "shadow-[0_0_30px_rgba(255,0,255,0.4)]"}
       `}>
         {game.thumbImage ? (
-          <img src={game.thumbImage} alt={game.title} className="w-full h-full object-cover" />
+          <img src={game.thumbImage} alt={game.title} width={128} height={128} className="w-full h-full object-cover" />
         ) : isEdu ? (
           game.emoji
         ) : (
@@ -53,7 +53,7 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
           block text-[0.58rem] tracking-[0.2em] uppercase mb-1.5 font-bold
           ${isEdu ? "text-edu-accent font-edu-body" : "text-synth-accent font-display"}
         `}>
-          {isEdu ? "⭐ FEATURED GAME" : <span className="inline-flex items-center gap-1"><Star size={10} fill="currentColor" /> GAME OF THE WEEK</span>}
+          {isEdu ? "⭐ FEATURED GAME" : <span className="inline-flex items-center gap-1"><Star size={10} fill="currentColor" /> FEATURED GAME</span>}
         </span>
 
         <div className={`
