@@ -24,7 +24,7 @@ export function GameModal({ game }: GameModalProps) {
   const category = isEdu && game.eduCategory ? game.eduCategory : game.category;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(() => window.innerWidth < 640);
   const close = () => navigate({ to: "/" });
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export function GameModal({ game }: GameModalProps) {
       >
         {/* Modal Header */}
         <div className={`
-          flex items-center gap-4 px-6 py-4 flex-shrink-0 border-b
+          flex items-center gap-2 sm:gap-4 px-3 sm:px-6 py-2 sm:py-4 flex-shrink-0 border-b
           ${isEdu ? "border-edu-border" : "border-synth-border"}
         `}>
           {isEdu
@@ -138,7 +138,7 @@ export function GameModal({ game }: GameModalProps) {
         `}>
           <iframe
             ref={iframeRef}
-            className="w-full h-full min-h-[480px] block border-none"
+            className="w-full h-full min-h-[300px] sm:min-h-[480px] block border-none"
             src={game.iframeUrl}
             title={title}
             allow="fullscreen; gamepad"
@@ -148,16 +148,16 @@ export function GameModal({ game }: GameModalProps) {
 
         {/* Modal Footer */}
         <div className={`
-          flex items-start justify-between gap-4 px-6 py-3 flex-shrink-0 border-t
+          hidden sm:flex items-start justify-between gap-4 px-6 py-3 flex-shrink-0 border-t
           ${isEdu ? "border-edu-border" : "border-synth-border"}
         `}>
           <p className={`
-            flex-1 text-sm leading-snug overflow-y-auto max-h-16 pr-1
+            hidden sm:block flex-1 text-sm leading-snug overflow-y-auto max-h-16 pr-1
             ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
           `}>
             {description}
           </p>
-          <div className="flex gap-2 flex-shrink-0">
+          <div className="hidden sm:flex gap-2 flex-shrink-0">
             <button
               onClick={() => setExpanded(v => !v)}
               className={`
