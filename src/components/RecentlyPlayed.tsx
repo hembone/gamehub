@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react'
+import { Clock, Star } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import { GameCard } from './GameCard'
 import { SectionHeader } from './SectionHeader'
@@ -7,12 +7,20 @@ import type { Game } from '../data/gameTypes'
 interface Props {
   games: Game[]
   onOpen: (slug: string) => void
+  favoriteslugs: string[]
+  onToggleFavorite: (slug: string) => void
 }
 
-export function RecentlyPlayed({ games, onOpen }: Props) {
+export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite }: Props) {
   const { isEdu } = useTheme()
 
   if (games.length === 0) return null
+
+  const favSet = new Set(favoriteslugs)
+  const sorted = [
+    ...games.filter(g => favSet.has(g.slug)),
+    ...games.filter(g => !favSet.has(g.slug)),
+  ].slice(0, 12)
 
   return (
     <div className="mb-4 pt-3">
@@ -23,14 +31,44 @@ export function RecentlyPlayed({ games, onOpen }: Props) {
       />
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4 pt-2">
-        {games.slice(0, 12).map((game, i) => (
-          <GameCard
-            key={game.slug}
-            game={game}
-            onClick={() => onOpen(game.slug)}
-            style={{ animationDelay: `${i * 30}ms` }}
-          />
-        ))}
+        {sorted.map((game, i) => {
+          const isFav = favSet.has(game.slug)
+          return (
+            <div key={game.slug} className="relative group/card">
+              <GameCard
+                game={game}
+                onClick={() => onOpen(game.slug)}
+                style={{ animationDelay: `${i * 30}ms` }}
+              />
+              {/* Star button */}
+              <button
+                onClick={e => { e.stopPropagation(); onToggleFavorite(game.slug) }}
+                aria-label={isFav ? 'Unpin game' : 'Pin game'}
+                className={`
+                  absolute top-1.5 right-1.5 z-10 w-6 h-6 flex items-center justify-center
+                  rounded-full transition-all duration-200
+                  ${isFav
+                    ? 'opacity-100'
+                    : 'opacity-0 group-hover/card:opacity-100'
+                  }
+                  ${isEdu
+                    ? 'bg-edu-surface/80 hover:bg-edu-surface'
+                    : 'bg-synth-bg/70 hover:bg-synth-bg'
+                  }
+                `}
+              >
+                <Star
+                  size={13}
+                  className={isFav
+                    ? isEdu ? 'text-edu-accent' : 'text-[#00e5ff] drop-shadow-[0_0_4px_#00e5ff]'
+                    : isEdu ? 'text-edu-text2' : 'text-synth-text2'
+                  }
+                  fill={isFav ? 'currentColor' : 'none'}
+                />
+              </button>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

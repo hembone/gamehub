@@ -22,7 +22,7 @@ export function SectionHeader({ title, icon, isEdu, showSeeAll }: Props) {
       </span>
       <div className={`
         flex-1 h-px
-        ${isEdu ? "bg-edu-border" : "bg-synth-border shadow-[0_0_5px_rgba(255,0,255,0.2)]"}
+        ${isEdu ? "bg-edu-border" : "bg-gradient-to-r from-synth-border via-[#00e5ff33] to-transparent shadow-[0_0_5px_rgba(0,229,255,0.15)]"}
       `} />
       {showSeeAll && (
         <a

@@ -11,7 +11,9 @@ import { AdSlot } from "../components/AdSlot";
 import { BackToTop } from "../components/BackToTop";
 import { useTheme } from "../hooks/useTheme";
 import { useRecentlyPlayed } from "../hooks/useRecentlyPlayed";
+import { useFavorites } from "../hooks/useFavorites";
 import { GAMES } from "../data/games";
+import { sessionShuffle } from "../utils/shuffle";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
 const ADSENSE_CLIENT    = "ca-pub-XXXXXXXXXXXXXXXX";
@@ -32,15 +34,18 @@ function IndexPage() {
   const [activeCategory, setActiveCategory] = useState("all");
 
   const { slugs: recentSlugs, add: addRecent } = useRecentlyPlayed();
+  const { slugs: favSlugs, toggle: toggleFavorite } = useFavorites();
   const recentGames = useMemo(
     () => recentSlugs.map(s => GAMES.find(g => g.slug === s)).filter(Boolean) as typeof GAMES,
     [recentSlugs]
   );
 
-  const featuredGame = useMemo(() => GAMES[Math.floor(Math.random() * GAMES.length)], []);
+  const shuffledGames = useMemo(() => sessionShuffle(GAMES), []);
+
+  const featuredGame = useMemo(() => shuffledGames[0], [shuffledGames]);
 
   const filteredGames = useMemo(() => {
-    return GAMES.filter((game) => {
+    return shuffledGames.filter((game) => {
       const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
       const matchesSearch = title.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = activeCategory === "all" || game.category === activeCategory;
@@ -94,7 +99,7 @@ function IndexPage() {
 
           {/* Main column */}
           <div>
-            <RecentlyPlayed games={recentGames} onOpen={openGame} />
+            <RecentlyPlayed games={recentGames} onOpen={openGame} favoriteslugs={favSlugs} onToggleFavorite={toggleFavorite} />
             <section className="mb-10">
               <SectionHeader
                 title={isFiltered
