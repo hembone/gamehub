@@ -83,6 +83,12 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes neon-cycle {
+  0%   { border-color: #ff2dff; box-shadow: 0 0 18px #ff2dff, 0 0 40px rgba(255,45,255,0.3), inset 0 0 12px rgba(255,45,255,0.1); color: #ff2dff; }
+  50%  { border-color: #00e5ff; box-shadow: 0 0 18px #00e5ff, 0 0 40px rgba(0,229,255,0.3), inset 0 0 12px rgba(0,229,255,0.1); color: #00e5ff; }
+  100% { border-color: #ff2dff; box-shadow: 0 0 18px #ff2dff, 0 0 40px rgba(255,45,255,0.3), inset 0 0 12px rgba(255,45,255,0.1); color: #ff2dff; }
+}
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -95,7 +101,7 @@
     position: fixed;
     inset: 0;
     background:
-      repeating-linear-gradient(0deg, #ff00ff0f 0px, transparent 1px, transparent 60px, #ff00ff0f 61px),
+      repeating-linear-gradient(0deg, #00e5ff0d 0px, transparent 1px, transparent 60px, #00e5ff0d 61px),
       repeating-linear-gradient(90deg, #ff00ff0f 0px, transparent 1px, transparent 60px, #ff00ff0f 61px);
     pointer-events: none;
     z-index: 0;

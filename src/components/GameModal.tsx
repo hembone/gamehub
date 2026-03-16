@@ -188,10 +188,10 @@ export function GameModal({ game }: GameModalProps) {
         {/* Related games */}
         {related.length > 0 && (
           <div className={`flex-shrink-0 border-t px-4 py-3 ${isEdu ? "border-edu-border" : "border-synth-border"}`}>
-            <p className={`text-[0.6rem] font-bold tracking-widest uppercase mb-2 ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-display"}`}>
+            <p className={`text-[0.6rem] font-bold tracking-widest uppercase mb-1 ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-display"}`}>
               {isEdu ? "More Like This" : "MORE LIKE THIS"}
             </p>
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <div className="flex gap-2 overflow-x-auto pt-2 pb-2 scrollbar-none">
               {related.map((g) => (
                 <button
                   key={g.slug}

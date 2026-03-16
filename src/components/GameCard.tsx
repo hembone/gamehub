@@ -40,7 +40,7 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
         hover:-translate-y-1 hover:scale-[1.02]
         ${isEdu
           ? "bg-edu-card-bg rounded-2xl border-edu-border hover:border-edu-accent hover:shadow-[0_8px_24px_rgba(66,153,225,0.15)]"
-          : "bg-synth-card-bg rounded-xl border-synth-border backdrop-blur-sm hover:border-synth-accent hover:shadow-[0_8px_30px_rgba(255,0,255,0.17),0_0_0_1px_rgba(255,0,255,0.27)]"
+          : "bg-synth-card-bg rounded-xl border-synth-border backdrop-blur-sm hover:border-synth-accent hover:shadow-[0_8px_30px_rgba(255,0,255,0.17),0_0_0_1px_rgba(255,0,255,0.27),0_0_20px_rgba(0,229,255,0.08)]"
         }
       `}
     >
@@ -66,8 +66,18 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
 
 
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          {isEdu ? <span className="text-4xl">▶</span> : <Play size={36} className="text-white" fill="white" />}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50">
+          {isEdu
+            ? <span className="text-4xl">▶</span>
+            : (
+              <div
+                className="rounded-full border-2 p-3"
+                style={{ animation: 'neon-cycle 2s linear infinite' }}
+              >
+                <Play size={28} fill="currentColor" style={{ filter: 'drop-shadow(0 0 6px currentColor)' }} />
+              </div>
+            )
+          }
         </div>
       </div>
 
