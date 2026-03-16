@@ -36,7 +36,7 @@ export function AdSlot({ format, slotId, clientId = "ca-pub-XXXXXXXXXXXXXXXX" }:
 
   const wrapperClass = format === "leaderboard"
     ? `
-        hidden md:flex w-full justify-center items-center py-2 px-6 border-b z-10 relative transition-all duration-300
+        hidden md:flex w-full justify-center items-center py-2 px-6 border-b mb-6 z-10 relative transition-all duration-300
         ${isEdu
           ? "bg-white border-edu-border"
           : "bg-synth-surface border-synth-border shadow-[inset_0_0_16px_rgba(255,0,255,0.05)]"
