@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
-import { FeaturedBanner } from "../components/FeaturedBanner";
+import { SplashScreen, useSplash } from "../components/SplashScreen";
 import { CategoryPills } from "../components/CategoryPills";
 import { GameGrid } from "../components/GameGrid";
 import { RecentlyPlayed } from "../components/RecentlyPlayed";
@@ -17,7 +17,6 @@ import { sessionShuffle } from "../utils/shuffle";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
 const ADSENSE_CLIENT    = "ca-pub-XXXXXXXXXXXXXXXX";
-const AD_SLOT_LEADERBOARD = "1111111111";
 const AD_SLOT_SIDEBAR_TOP = "2222222222";
 const AD_SLOT_SIDEBAR_MID = "3333333333";
 // ─────────────────────────────────────────────────────────────────────────
@@ -33,6 +32,7 @@ function IndexPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
+  const { visible: splashVisible, dismiss: dismissSplash } = useSplash();
   const { slugs: recentSlugs, add: addRecent } = useRecentlyPlayed();
   const { slugs: favSlugs, toggle: toggleFavorite } = useFavorites();
   const recentGames = useMemo(
@@ -73,24 +73,9 @@ function IndexPage() {
 
       <Header search={search} onSearchChange={setSearch} />
 
-      {/* Leaderboard ad */}
-      <AdSlot format="leaderboard" slotId={AD_SLOT_LEADERBOARD} clientId={ADSENSE_CLIENT} />
-
-      {/* Hero */}
-      <div className="relative z-10 text-center px-6 pt-6 pb-4 sm:pt-12 sm:pb-8">
-        <h1 className={`
-          font-black leading-tight mb-3 text-[clamp(1.2rem,4.5vw,3.5rem)] transition-all duration-300
-          ${isEdu
-            ? "text-edu-accent font-edu-display"
-            : "font-display tracking-wide bg-gradient-to-b from-white via-[#ff99ff] to-[#cc44ff] text-gradient-clip drop-shadow-[0_0_20px_rgba(255,0,255,0.35)]"
-          }
-        `}>
-          {isEdu ? "Learn. Explore. Play!" : "PLAY ANYTHING.\nANYTIME."}
-        </h1>
-      </div>
+{splashVisible && <SplashScreen game={featuredGame} onDismiss={dismissSplash} />}
 
       <main className="relative z-10 px-6 pb-16">
-        {!isFiltered && <div className="hidden sm:block max-w-[1200px] mx-auto"><FeaturedBanner game={featuredGame} /></div>}
 
         <CategoryPills active={activeCategory} onChange={setActiveCategory} />
 
@@ -98,7 +83,7 @@ function IndexPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
 
           {/* Main column */}
-          <div>
+          <div className="min-w-0">
             <RecentlyPlayed games={recentGames} onOpen={openGame} favoriteslugs={favSlugs} onToggleFavorite={toggleFavorite} />
             <section className="mb-10">
               <SectionHeader

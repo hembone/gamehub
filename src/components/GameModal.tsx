@@ -47,33 +47,57 @@ export function GameModal({ game }: GameModalProps) {
       />
 
       {/* Left ad panel */}
-      <div className={`
-        hidden xl:flex items-center justify-center
-        ${expanded
-          ? "fixed left-0 top-0 h-full w-[160px] z-[650]"
-          : "absolute left-0 top-0 h-full w-[160px] z-[510]"
-        }
-        ${isEdu ? "bg-edu-bg/80" : "bg-synth-bg/80"}
-      `}>
+      <div
+        className={`
+          hidden xl:flex items-center justify-center
+          ${expanded
+            ? "fixed left-0 top-0 h-full w-[160px] 2xl:w-[300px] z-[650]"
+            : "absolute left-0 top-0 h-full w-[160px] 2xl:w-[300px] z-[510]"
+          }
+        `}
+        style={isEdu ? { background: 'rgba(240,247,255,0.92)' } : {
+          background: '#0d0015',
+          backgroundImage: `
+            repeating-linear-gradient(0deg, rgba(0,229,255,0.05) 0px, transparent 1px, transparent 60px, rgba(0,229,255,0.05) 61px),
+            repeating-linear-gradient(90deg, rgba(255,0,255,0.06) 0px, transparent 1px, transparent 60px, rgba(255,0,255,0.06) 61px)
+          `,
+        }}
+      >
+        {!isEdu && (
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full opacity-10 pointer-events-none"
+            style={{ background: 'linear-gradient(180deg,#ff2dff 0%,#ff6b35 40%,#ffcc00 100%)', filter: 'blur(30px)' }} />
+        )}
         <AdSlot format="skyscraper" slotId="4444444444" />
       </div>
 
       {/* Right ad panel */}
-      <div className={`
-        hidden xl:flex items-center justify-center
-        ${expanded
-          ? "fixed right-0 top-0 h-full w-[160px] z-[650]"
-          : "absolute right-0 top-0 h-full w-[160px] z-[510]"
-        }
-        ${isEdu ? "bg-edu-bg/80" : "bg-synth-bg/80"}
-      `}>
+      <div
+        className={`
+          hidden xl:flex items-center justify-center
+          ${expanded
+            ? "fixed right-0 top-0 h-full w-[160px] 2xl:w-[300px] z-[650]"
+            : "absolute right-0 top-0 h-full w-[160px] 2xl:w-[300px] z-[510]"
+          }
+        `}
+        style={isEdu ? { background: 'rgba(240,247,255,0.92)' } : {
+          background: '#0d0015',
+          backgroundImage: `
+            repeating-linear-gradient(0deg, rgba(0,229,255,0.05) 0px, transparent 1px, transparent 60px, rgba(0,229,255,0.05) 61px),
+            repeating-linear-gradient(90deg, rgba(255,0,255,0.06) 0px, transparent 1px, transparent 60px, rgba(255,0,255,0.06) 61px)
+          `,
+        }}
+      >
+        {!isEdu && (
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full opacity-10 pointer-events-none"
+            style={{ background: 'linear-gradient(180deg,#ff2dff 0%,#ff6b35 40%,#ffcc00 100%)', filter: 'blur(30px)' }} />
+        )}
         <AdSlot format="skyscraper" slotId="5555555555" />
       </div>
 
       {/* Modal dialog */}
       <div className={`
         ${expanded
-          ? "fixed inset-0 xl:left-[160px] xl:right-[160px] z-[600] flex items-center justify-center"
+          ? "fixed inset-0 xl:left-[160px] xl:right-[160px] 2xl:left-[300px] 2xl:right-[300px] z-[600] flex items-center justify-center"
           : "absolute inset-0 flex items-center justify-center p-6 pointer-events-none"
         }
       `}>
@@ -191,7 +215,8 @@ export function GameModal({ game }: GameModalProps) {
             <p className={`text-[0.6rem] font-bold tracking-widest uppercase mb-1 ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-display"}`}>
               {isEdu ? "More Like This" : "MORE LIKE THIS"}
             </p>
-            <div className="flex gap-2 overflow-x-auto pt-2 pb-2 scrollbar-none">
+            <div className="overflow-x-auto py-4 -my-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex gap-3">
               {related.map((g) => (
                 <button
                   key={g.slug}
@@ -216,6 +241,7 @@ export function GameModal({ game }: GameModalProps) {
                   </p>
                 </button>
               ))}
+              </div>
             </div>
           </div>
         )}

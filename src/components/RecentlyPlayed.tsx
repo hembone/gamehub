@@ -30,11 +30,12 @@ export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite 
         isEdu={isEdu}
       />
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4 pt-2">
+      <div className="overflow-x-auto py-3" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="flex gap-4">
         {sorted.map((game, i) => {
           const isFav = favSet.has(game.slug)
           return (
-            <div key={game.slug} className="relative group/card">
+            <div key={game.slug} className="relative group/card flex-shrink-0 w-[170px]">
               <GameCard
                 game={game}
                 onClick={() => onOpen(game.slug)}
@@ -73,6 +74,7 @@ export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite 
             </div>
           )
         })}
+        </div>
       </div>
     </div>
   )
