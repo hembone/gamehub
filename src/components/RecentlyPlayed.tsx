@@ -39,6 +39,10 @@ export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite 
                 game={game}
                 onClick={() => onOpen(game.slug)}
                 style={{ animationDelay: `${i * 30}ms` }}
+                className={isEdu
+                  ? 'group-hover/card:-translate-y-1 group-hover/card:scale-[1.02] group-hover/card:border-edu-accent group-hover/card:shadow-[0_8px_24px_rgba(66,153,225,0.15)]'
+                  : 'group-hover/card:-translate-y-1 group-hover/card:scale-[1.02] group-hover/card:border-synth-accent group-hover/card:shadow-[0_8px_30px_rgba(255,0,255,0.17),0_0_0_1px_rgba(255,0,255,0.27),0_0_20px_rgba(0,229,255,0.08)]'
+                }
               />
               {/* Star button */}
               <button
@@ -46,7 +50,7 @@ export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite 
                 aria-label={isFav ? 'Unpin game' : 'Pin game'}
                 className={`
                   absolute top-1.5 right-1.5 z-10 w-6 h-6 flex items-center justify-center
-                  rounded-full transition-all duration-200
+                  rounded-full transition-all duration-200 cursor-pointer
                   ${isFav
                     ? 'opacity-100'
                     : 'opacity-0 group-hover/card:opacity-100'

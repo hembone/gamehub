@@ -7,6 +7,7 @@ interface GameCardProps {
   game: Game;
   onClick: () => void;
   style?: React.CSSProperties;
+  className?: string;
 }
 
 const STAR_MAP: Record<number, string> = {
@@ -23,7 +24,7 @@ const BADGE_STYLES = {
   popular: { synth: "bg-synth-badge-popular", edu: "bg-edu-badge-popular", label: "TOP" },
 };
 
-export function GameCard({ game, onClick, style }: GameCardProps) {
+export function GameCard({ game, onClick, style, className }: GameCardProps) {
   const { isEdu } = useTheme();
 
   const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
@@ -42,6 +43,7 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
           ? "bg-edu-card-bg rounded-2xl border-edu-border hover:border-edu-accent hover:shadow-[0_8px_24px_rgba(66,153,225,0.15)]"
           : "bg-synth-card-bg rounded-xl border-synth-border backdrop-blur-sm hover:border-synth-accent hover:shadow-[0_8px_30px_rgba(255,0,255,0.17),0_0_0_1px_rgba(255,0,255,0.27),0_0_20px_rgba(0,229,255,0.08)]"
         }
+        ${className ?? ''}
       `}
     >
       {/* Thumbnail */}
@@ -66,7 +68,7 @@ export function GameCard({ game, onClick, style }: GameCardProps) {
 
 
         {/* Hover overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover/card:opacity-100 transition-opacity duration-200 bg-black/50">
           {isEdu
             ? <span className="text-4xl">▶</span>
             : (
