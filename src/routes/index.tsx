@@ -1,13 +1,16 @@
 import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
 import { FeaturedBanner } from "../components/FeaturedBanner";
 import { CategoryPills } from "../components/CategoryPills";
 import { GameGrid } from "../components/GameGrid";
+import { RecentlyPlayed } from "../components/RecentlyPlayed";
+import { SectionHeader } from "../components/SectionHeader";
 import { AdSlot } from "../components/AdSlot";
 import { BackToTop } from "../components/BackToTop";
 import { useTheme } from "../hooks/useTheme";
+import { useRecentlyPlayed } from "../hooks/useRecentlyPlayed";
 import { GAMES } from "../data/games";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
@@ -21,43 +24,18 @@ export const Route = createFileRoute("/")({
   component: IndexPage,
 });
 
-function SectionHeader({ title, icon, isEdu, showSeeAll }: { title: string; icon?: React.ReactNode; isEdu: boolean; showSeeAll?: boolean }) {
-  return (
-    <div className="flex items-center gap-3 mb-4">
-      <span className={`
-        inline-flex items-center gap-1.5 font-bold whitespace-nowrap tracking-widest uppercase
-        ${isEdu
-          ? "text-edu-accent font-edu-display text-lg tracking-wide"
-          : "text-synth-text font-display text-[0.9rem]"
-        }
-      `}>
-        {!isEdu && icon}
-        {title}
-      </span>
-      <div className={`
-        flex-1 h-px
-        ${isEdu ? "bg-edu-border" : "bg-synth-border shadow-[0_0_5px_rgba(255,0,255,0.2)]"}
-      `} />
-      {showSeeAll && (
-        <a
-          href="#"
-          className={`
-            text-[0.68rem] opacity-75 hover:opacity-100 no-underline transition-opacity whitespace-nowrap
-            ${isEdu ? "text-edu-accent2 font-edu-body text-sm" : "text-synth-accent2 font-body"}
-          `}
-        >
-          {isEdu ? "See All →" : "SEE ALL →"}
-        </a>
-      )}
-    </div>
-  );
-}
 
 function IndexPage() {
   const navigate = useNavigate();
   const { isEdu } = useTheme();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+
+  const { slugs: recentSlugs, add: addRecent } = useRecentlyPlayed();
+  const recentGames = useMemo(
+    () => recentSlugs.map(s => GAMES.find(g => g.slug === s)).filter(Boolean) as typeof GAMES,
+    [recentSlugs]
+  );
 
   const featuredGame = useMemo(() => GAMES[Math.floor(Math.random() * GAMES.length)], []);
 
@@ -72,7 +50,10 @@ function IndexPage() {
 
   const isFiltered = search.length > 0 || activeCategory !== "all";
 
-  const openGame = (slug: string) => navigate({ to: "/games/$slug", params: { slug } });
+  const openGame = (slug: string) => {
+    addRecent(slug);
+    navigate({ to: "/games/$slug", params: { slug } });
+  };
 
   return (
     <>
@@ -113,6 +94,7 @@ function IndexPage() {
 
           {/* Main column */}
           <div>
+            <RecentlyPlayed games={recentGames} onOpen={openGame} />
             <section className="mb-10">
               <SectionHeader
                 title={isFiltered
@@ -136,7 +118,7 @@ function IndexPage() {
           </div>
 
           {/* Sticky sidebar */}
-          <aside className="hidden lg:flex flex-col gap-5 sticky top-20">
+          <aside className="hidden lg:flex flex-col gap-5 sticky top-20 pt-12">
             <AdSlot format="sidebar-top" slotId={AD_SLOT_SIDEBAR_TOP} clientId={ADSENSE_CLIENT} />
             <AdSlot format="sidebar-mid" slotId={AD_SLOT_SIDEBAR_MID} clientId={ADSENSE_CLIENT} />
           </aside>

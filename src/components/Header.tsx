@@ -23,8 +23,8 @@ export function Header({ search, onSearchChange }: HeaderProps) {
         className={`
           w-full rounded-full pl-9 pr-4 py-2 text-sm outline-none transition-all duration-200
           ${isEdu
-            ? "bg-edu-bg border border-edu-border text-edu-text placeholder-edu-text2/50 font-edu-body focus:border-edu-accent focus:ring-2 focus:ring-edu-border"
-            : "bg-synth-surface2 border border-synth-border text-synth-text placeholder-synth-text2/50 font-body focus:border-synth-accent focus:ring-2 focus:ring-synth-border"
+            ? "bg-white border border-edu-border text-edu-text placeholder-edu-text2/50 font-edu-body focus:border-edu-accent focus:ring-2 focus:ring-edu-border"
+            : "bg-transparent border border-synth-border text-synth-text placeholder-synth-text2/50 font-body focus:border-synth-accent focus:ring-2 focus:ring-synth-border"
           }
         `}
       />
