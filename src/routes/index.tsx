@@ -12,7 +12,7 @@ import { BackToTop } from "../components/BackToTop";
 import { useTheme } from "../hooks/useTheme";
 import { useRecentlyPlayed } from "../hooks/useRecentlyPlayed";
 import { useFavorites } from "../hooks/useFavorites";
-import { GAMES } from "../data/games";
+import { GAMES, CATEGORIES } from "../data/games";
 import { sessionShuffle } from "../utils/shuffle";
 
 // ── Replace with your real AdSense IDs ──────────────────────────────────
@@ -75,6 +75,9 @@ function IndexPage() {
 
 {splashVisible && <SplashScreen game={featuredGame} onDismiss={dismissSplash} />}
 
+      {/* Visually hidden h1 for crawlers */}
+      <h1 className="sr-only">Arcade Void — Play 1,400+ Free Online Games</h1>
+
       <main className="relative z-10 px-6 pb-16">
 
         <CategoryPills active={activeCategory} onChange={setActiveCategory} />
@@ -128,7 +131,19 @@ function IndexPage() {
         <span>
           {isEdu ? "© 2025 FunLearn Zone — Safe & Educational" : "© 2025 ARCADE VOID — ALL RIGHTS RESERVED"}
         </span>
-        <div className="flex gap-5">
+        <div className="flex gap-5 flex-wrap">
+          {/* Category links — static for SEO */}
+          {CATEGORIES.filter(c => c.id !== "all").map(cat => (
+            <a
+              key={cat.id}
+              href={`/category/${cat.id}`}
+              className={`no-underline transition-colors duration-200 hover:opacity-100 ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}`}
+            >
+              {isEdu ? cat.eduLabel : cat.synthLabel}
+            </a>
+          ))}
+        </div>
+        <div className="flex gap-5 flex-wrap">
           {(isEdu
             ? [["Safety", "/safety"], ["Privacy", "/privacy"], ["Teachers", "/teachers"], ["Suggest a Game", "/suggest"]]
             : [["DMCA", "/dmca"], ["PRIVACY", "/privacy"], ["CONTACT", "/contact"], ["REQUEST A GAME", "/suggest"]]
@@ -136,10 +151,7 @@ function IndexPage() {
             <a
               key={label}
               href={href}
-              className={`
-                no-underline transition-colors duration-200 hover:opacity-100
-                ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}
-              `}
+              className={`no-underline transition-colors duration-200 hover:opacity-100 ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}`}
             >
               {label}
             </a>

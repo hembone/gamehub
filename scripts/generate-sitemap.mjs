@@ -48,8 +48,11 @@ function escapeXml(str) {
     .replace(/"/g, "&quot;");
 }
 
+const CATEGORIES = ["action","puzzle","match3","cards","mahjong","block","racing","shooter","strategy","sports"];
+
 const staticPages = [
   { url: SITE_URL, priority: "1.0", changefreq: "daily" },
+  ...CATEGORIES.map(cat => ({ url: `${SITE_URL}/category/${cat}`, priority: "0.8", changefreq: "weekly" })),
 ];
 
 const gameUrls = gameEntries.map(({ slug, date }) =>

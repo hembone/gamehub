@@ -3,6 +3,7 @@ import { useTheme } from "../hooks/useTheme";
 import { GAMES, CATEGORIES } from "../data/games";
 import { GameGrid } from "../components/GameGrid";
 import { Header } from "../components/Header";
+import { JsonLd } from "../components/JsonLd";
 import { SITE_URL, SITE_NAME } from "../config";
 
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
@@ -53,8 +54,25 @@ function CategoryPage() {
   const { isEdu } = useTheme();
   const navigate = useNavigate();
 
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `${cat.synthLabel} Games — ${SITE_NAME}`,
+    "description": CATEGORY_DESCRIPTIONS[cat.id] ?? "",
+    "url": `${SITE_URL}/category/${cat.id}`,
+    "numberOfItems": games.length,
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+        { "@type": "ListItem", "position": 2, "name": cat.synthLabel, "item": `${SITE_URL}/category/${cat.id}` },
+      ],
+    },
+  };
+
   return (
     <>
+      <JsonLd data={collectionSchema} />
       <Header search="" onSearchChange={() => {}} />
       <main className="relative z-10 max-w-[1280px] mx-auto px-6 pb-16 pt-8">
         <div className="mb-6">

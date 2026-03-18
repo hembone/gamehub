@@ -47,7 +47,7 @@ export const Route = createFileRoute("/games/$slug")({
 
 function GameModalRoute() {
   const { game } = Route.useLoaderData();
-  const schema = {
+  const gameSchema = {
     "@context": "https://schema.org",
     "@type": "VideoGame",
     "name": game.title,
@@ -58,9 +58,19 @@ function GameModalRoute() {
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "publisher": { "@type": "Organization", "name": SITE_NAME },
   };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+      { "@type": "ListItem", "position": 2, "name": game.category.charAt(0).toUpperCase() + game.category.slice(1), "item": `${SITE_URL}/category/${game.category}` },
+      { "@type": "ListItem", "position": 3, "name": game.title, "item": `${SITE_URL}/games/${game.slug}` },
+    ],
+  };
   return (
     <>
-      <JsonLd data={schema} />
+      <JsonLd data={gameSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <GameModal game={game} />
     </>
   );
