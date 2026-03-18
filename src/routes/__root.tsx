@@ -84,9 +84,18 @@ export const Route = createRootRoute({
       { name: 'twitter:description', content: SITE_DESCRIPTION },
       // Robots
       { name: 'robots', content: 'index, follow' },
+      { name: 'theme-color', content: '#0d0015' },
+      // Open Graph image
+      { property: 'og:image', content: `${SITE_URL}/og-image.png` },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { name: 'twitter:image', content: `${SITE_URL}/og-image.png` },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
+      // Preconnect for Google Fonts
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
