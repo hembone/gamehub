@@ -11,16 +11,20 @@ const ADSENSE_LIVE = true;
 export function AdSlot({ slotId, clientId = "ca-pub-3744119325664696" }: AdSlotProps) {
   const adRef = useRef<HTMLModElement>(null);
   const { isEdu } = useTheme();
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
 
   useEffect(() => {
     if (!ADSENSE_LIVE) return;
-    try {
-      // @ts-ignore
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.warn("AdSense push failed", e);
-    }
-  }, []);
+    const timer = requestAnimationFrame(() => {
+      try {
+        // @ts-ignore
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.warn("AdSense push failed", e);
+      }
+    });
+    return () => cancelAnimationFrame(timer);
+  }, [pathname]);
 
   const placeholderClass = `
     w-full flex items-center justify-center border border-dashed rounded-lg transition-all duration-300 min-h-[90px]
@@ -34,6 +38,7 @@ export function AdSlot({ slotId, clientId = "ca-pub-3744119325664696" }: AdSlotP
     <div className="w-full flex justify-center items-center" aria-label="Advertisement">
       {ADSENSE_LIVE ? (
         <ins
+          key={`${slotId}-${pathname}`}
           ref={adRef}
           className="adsbygoogle block w-full"
           style={{ display: "block" }}
