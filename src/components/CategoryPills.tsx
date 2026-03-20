@@ -50,7 +50,7 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
       <div className={`
         sm:hidden px-3 py-3 sticky top-[104px] z-40 transition-colors duration-300
         ${isStuck
-          ? isEdu ? "bg-[rgba(247,250,252,0.95)]" : "bg-[rgba(13,0,21,0.92)]"
+          ? isEdu ? "backdrop-blur-md bg-white/90" : "backdrop-blur-md bg-[#0d001599]"
           : "bg-transparent"
         }
       `}>
@@ -113,8 +113,8 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
         transition-[background,backdrop-filter] duration-300
         ${isStuck
           ? isEdu
-            ? "backdrop-blur-md bg-[rgba(247,250,252,0.85)]"
-            : "backdrop-blur-md bg-[rgba(13,0,21,0.75)]"
+            ? "backdrop-blur-md bg-white/90"
+            : "backdrop-blur-md bg-[#0d001599]"
           : "bg-transparent"
         }
       `}>

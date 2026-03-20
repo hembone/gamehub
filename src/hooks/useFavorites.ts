@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 const KEY = 'arcade-void-favorites'
 
@@ -11,10 +11,11 @@ function readSlugs(): string[] {
 }
 
 export function useFavorites() {
-  const [slugs, setSlugs] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return []
-    return readSlugs()
-  })
+  const [slugs, setSlugs] = useState<string[]>([])
+
+  useEffect(() => {
+    setSlugs(readSlugs())
+  }, [])
 
   const toggle = useCallback((slug: string) => {
     setSlugs(prev => {
