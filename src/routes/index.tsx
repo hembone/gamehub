@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
 import { SplashScreen, useSplash } from "../components/SplashScreen";
@@ -15,11 +15,9 @@ import { useFavorites } from "../hooks/useFavorites";
 import { GAMES, CATEGORIES } from "../data/games";
 import { sessionShuffle } from "../utils/shuffle";
 
-// ── Replace with your real AdSense IDs ──────────────────────────────────
-const ADSENSE_CLIENT    = "ca-pub-XXXXXXXXXXXXXXXX";
-const AD_SLOT_SIDEBAR_TOP = "2222222222";
-const AD_SLOT_SIDEBAR_MID = "3333333333";
-// ─────────────────────────────────────────────────────────────────────────
+const ADSENSE_CLIENT      = "ca-pub-3744119325664696";
+const AD_SLOT_SIDEBAR_TOP = "8273201368";
+const AD_SLOT_SIDEBAR_MID = "6398547769";
 
 export const Route = createFileRoute("/")({
   component: IndexPage,
@@ -40,7 +38,11 @@ function IndexPage() {
     [recentSlugs]
   );
 
-  const shuffledGames = useMemo(() => sessionShuffle(GAMES), []);
+  const [shuffledGames, setShuffledGames] = useState(GAMES);
+
+  useEffect(() => {
+    setShuffledGames(sessionShuffle(GAMES));
+  }, []);
 
   const featuredGame = useMemo(() => shuffledGames[0], [shuffledGames]);
 
@@ -112,8 +114,8 @@ function IndexPage() {
 
           {/* Sticky sidebar */}
           <aside className="hidden lg:flex flex-col gap-5 sticky top-20 pt-12">
-            <AdSlot format="sidebar-top" slotId={AD_SLOT_SIDEBAR_TOP} clientId={ADSENSE_CLIENT} />
-            <AdSlot format="sidebar-mid" slotId={AD_SLOT_SIDEBAR_MID} clientId={ADSENSE_CLIENT} />
+            <AdSlot slotId={AD_SLOT_SIDEBAR_TOP} clientId={ADSENSE_CLIENT} />
+            <AdSlot slotId={AD_SLOT_SIDEBAR_MID} clientId={ADSENSE_CLIENT} />
           </aside>
 
         </div>

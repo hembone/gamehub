@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 const KEY = 'arcade-void-recent'
 const MAX = 24
@@ -12,10 +12,11 @@ function readSlugs(): string[] {
 }
 
 export function useRecentlyPlayed() {
-  const [slugs, setSlugs] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return []
-    return readSlugs()
-  })
+  const [slugs, setSlugs] = useState<string[]>([])
+
+  useEffect(() => {
+    setSlugs(readSlugs())
+  }, [])
 
   const add = useCallback((slug: string) => {
     setSlugs(prev => {

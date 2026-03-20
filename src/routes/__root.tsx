@@ -107,6 +107,13 @@ export const Route = createRootRoute({
         href: 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap',
       },
     ],
+    scripts: [
+      {
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3744119325664696',
+        async: true,
+        crossOrigin: 'anonymous',
+      },
+    ],
   }),
   component: AppShell,
   shellComponent: RootDocument,
