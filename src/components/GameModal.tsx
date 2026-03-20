@@ -39,16 +39,16 @@ export function GameModal({ game }: GameModalProps) {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[500] animate-fade-in">
+    <div className="fixed inset-0 z-[500] h-screen w-screen animate-fade-in">
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 ${isEdu ? "bg-edu-text/70 backdrop-blur-md" : "bg-[#0d0015cc] backdrop-blur-md"}`}
+        className={`absolute inset-0 ${isEdu ? "bg-edu-bg" : "bg-synth-bg"}`}
         onClick={close}
       />
 
       {/* 3-column layout */}
       <div className={`
-        relative z-[510] h-full
+        relative z-[510] h-screen
         grid grid-cols-1 xl:grid-cols-[160px_1fr_160px] 2xl:grid-cols-[300px_1fr_300px]
       `}>
         {/* Left ad column */}
@@ -71,7 +71,7 @@ export function GameModal({ game }: GameModalProps) {
 
         {/* Center column — modal */}
         <div className={`
-          flex items-center justify-center
+          flex items-center justify-center h-screen min-h-0 overflow-hidden
           ${expanded ? "" : "p-6"}
         `}>
       <div
