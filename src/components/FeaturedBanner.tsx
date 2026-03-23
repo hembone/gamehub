@@ -49,8 +49,8 @@ export function FeaturedBanner({ game }: FeaturedBannerProps) {
       <div className={`
         absolute inset-0
         ${isEdu
-          ? "bg-gradient-to-t from-[#1a365d]/95 via-[#1a365d]/50 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-[#1a365d]/40 sm:to-[#1a365d]/95"
-          : "bg-gradient-to-t from-[#0d0015]/95 via-[#0d0015]/50 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-[#0d0015]/40 sm:to-[#0d0015]/95"
+          ? "bg-gradient-to-t from-[#1a365d] from-[10%] via-[#1a365d]/75 via-[55%] to-[#1a365d]/20 sm:bg-gradient-to-r sm:from-transparent sm:from-[0%] sm:via-[#1a365d]/60 sm:via-[40%] sm:to-[#1a365d]"
+          : "bg-gradient-to-t from-[#0d0015] from-[10%] via-[#0d0015]/75 via-[55%] to-[#0d0015]/20 sm:bg-gradient-to-r sm:from-transparent sm:from-[0%] sm:via-[#0d0015]/60 sm:via-[40%] sm:to-[#0d0015]"
         }
       `} />
 

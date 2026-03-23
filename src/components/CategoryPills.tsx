@@ -49,10 +49,8 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
       {/* Mobile: custom dropdown (native <select> mispositions due to overflow-x:clip on page) */}
       <div className={`
         sm:hidden px-3 py-3 sticky top-[104px] z-40 transition-colors duration-300
-        ${isStuck
-          ? isEdu ? "backdrop-blur-md bg-white/90" : "backdrop-blur-md bg-[#0d001599]"
-          : "bg-transparent"
-        }
+        backdrop-blur-md
+        ${isEdu ? "bg-white/90" : "bg-[#0d001599]"}
       `}>
         <div className="relative">
           <button
@@ -111,12 +109,8 @@ export function CategoryPills({ active, onChange }: CategoryPillsProps) {
       <div className={`
         hidden sm:flex justify-center flex-wrap gap-2 px-6 py-3 sticky top-[56px] z-40
         transition-[background,backdrop-filter] duration-300
-        ${isStuck
-          ? isEdu
-            ? "backdrop-blur-md bg-white/90"
-            : "backdrop-blur-md bg-[#0d001599]"
-          : "bg-transparent"
-        }
+        backdrop-blur-md
+        ${isEdu ? "bg-white/90" : "bg-[#0d001599]"}
       `}>
         {CATEGORIES.map((cat) => {
           const isActive = active === cat.id;
