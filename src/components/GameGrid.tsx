@@ -38,7 +38,7 @@ export function GameGrid({ games, onOpen }: GameGridProps) {
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(170px,1fr))] gap-4">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
         {visible.map((game, i) => (
           <GameCard
             key={game.slug}

@@ -110,7 +110,7 @@ export function GameModal({ game }: GameModalProps) {
               text-xs mt-0.5
               ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
             `}>
-              {category} · {game.stars}★
+              {category}
             </div>
           </div>
           <button
