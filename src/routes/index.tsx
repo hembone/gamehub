@@ -14,12 +14,16 @@ import { useRecentlyPlayed } from "../hooks/useRecentlyPlayed";
 import { useFavorites } from "../hooks/useFavorites";
 import { GAMES, CATEGORIES } from "../data/games";
 import { sessionShuffle } from "../utils/shuffle";
+import { SITE_URL } from "../config";
 
 const ADSENSE_CLIENT      = "ca-pub-3744119325664696";
 const AD_SLOT_SIDEBAR_TOP = "8273201368";
 const AD_SLOT_SIDEBAR_MID = "6398547769";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    links: [{ rel: "canonical", href: SITE_URL + "/" }],
+  }),
   component: IndexPage,
 });
 
