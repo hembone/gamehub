@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { GameModal } from "../components/GameModal";
 import { JsonLd } from "../components/JsonLd";
@@ -47,6 +48,14 @@ export const Route = createFileRoute("/games/$slug")({
 
 function GameModalRoute() {
   const { game } = Route.useLoaderData();
+
+  useEffect(() => {
+    fetch("/api/plays", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: game.slug }),
+    }).catch(() => {});
+  }, [game.slug]);
   const gameSchema = {
     "@context": "https://schema.org",
     "@type": "VideoGame",
