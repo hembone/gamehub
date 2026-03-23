@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
 import { useState, useMemo, useEffect } from "react";
 import { LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
-import { SplashScreen, useSplash } from "../components/SplashScreen";
 import { CategoryPills } from "../components/CategoryPills";
 import { GameGrid } from "../components/GameGrid";
 import { RecentlyPlayed } from "../components/RecentlyPlayed";
@@ -34,7 +33,6 @@ function IndexPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const { visible: splashVisible, dismiss: dismissSplash } = useSplash();
   const { slugs: recentSlugs, add: addRecent } = useRecentlyPlayed();
   const { slugs: favSlugs, toggle: toggleFavorite } = useFavorites();
   const recentGames = useMemo(
@@ -47,8 +45,6 @@ function IndexPage() {
   useEffect(() => {
     setShuffledGames(sessionShuffle(GAMES));
   }, []);
-
-  const featuredGame = useMemo(() => shuffledGames[0], [shuffledGames]);
 
   const filteredGames = useMemo(() => {
     return shuffledGames.filter((game) => {
@@ -78,8 +74,6 @@ function IndexPage() {
       />
 
       <Header search={search} onSearchChange={setSearch} />
-
-{splashVisible && <SplashScreen game={featuredGame} onDismiss={dismissSplash} />}
 
       {/* Visually hidden h1 for crawlers */}
       <h1 className="sr-only">Arcade Void — Play 1,400+ Free Online Games</h1>
