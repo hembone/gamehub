@@ -30,7 +30,8 @@ export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite 
         isEdu={isEdu}
       />
 
-      <div className="overflow-x-auto py-3" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="relative">
+      <div className="overflow-x-auto py-3 px-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       <div className="flex gap-4">
         {sorted.map((game, i) => {
           const isFav = favSet.has(game.slug)
@@ -75,6 +76,8 @@ export function RecentlyPlayed({ games, onOpen, favoriteslugs, onToggleFavorite 
           )
         })}
         </div>
+      </div>
+      <div className={`pointer-events-none absolute inset-y-0 right-0 w-16 ${isEdu ? 'bg-gradient-to-l from-edu-bg' : 'bg-gradient-to-l from-synth-bg'}`} />
       </div>
     </div>
   )

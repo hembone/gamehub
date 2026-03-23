@@ -10,14 +10,6 @@ interface GameCardProps {
   className?: string;
 }
 
-const STAR_MAP: Record<number, string> = {
-  1: "★☆☆☆☆",
-  2: "★★☆☆☆",
-  3: "★★★☆☆",
-  4: "★★★★☆",
-  5: "★★★★★",
-};
-
 const BADGE_STYLES = {
   new: { synth: "bg-synth-badge-new", edu: "bg-edu-badge-new", label: "NEW" },
   hot: { synth: "bg-synth-badge-hot", edu: "bg-edu-badge-hot", label: "HOT" },
@@ -28,8 +20,6 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
   const { isEdu } = useTheme();
 
   const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
-  const category = isEdu && game.eduCategory ? game.eduCategory : game.category;
-
   return (
     <div
       onClick={onClick}
@@ -48,7 +38,7 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
     >
       {/* Thumbnail */}
       <div
-        className="relative w-full aspect-[4/3] flex items-center justify-center overflow-hidden"
+        className="relative w-full flex items-center justify-center overflow-hidden"
         style={{ background: game.thumbGradient }}
       >
         {game.thumbImage ? (
@@ -57,7 +47,7 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
             alt={title}
             width={200}
             height={150}
-            className="w-full h-full object-cover"
+            className="w-full h-auto block"
             loading="lazy"
           />
         ) : isEdu ? (
@@ -96,17 +86,6 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
           }
         `}>
           {title}
-        </div>
-        <div className="flex items-center justify-between">
-          <span className={`
-            text-[0.6rem] transition-colors duration-300
-            ${isEdu ? "text-edu-text2 font-edu-body text-[0.7rem]" : "text-synth-text2 font-body"}
-          `}>
-            {category}
-          </span>
-          <span className="text-[0.6rem] text-yellow-400 tracking-[-0.05em]">
-            {STAR_MAP[game.stars] ?? "★★★☆☆"}
-          </span>
         </div>
       </div>
     </div>
