@@ -4,6 +4,7 @@ import { GameModal } from "../components/GameModal";
 import { JsonLd } from "../components/JsonLd";
 import { GAMES } from "../data/games";
 import { SITE_URL, SITE_NAME } from "../config";
+import { trackPlay } from "../server/trackPlay";
 
 export const Route = createFileRoute("/games/$slug")({
   loader: ({ params }) => {
@@ -50,11 +51,7 @@ function GameModalRoute() {
   const { game } = Route.useLoaderData();
 
   useEffect(() => {
-    fetch("/api/plays", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug: game.slug }),
-    }).catch(() => {});
+    trackPlay({ data: { slug: game.slug } }).catch(() => {});
   }, [game.slug]);
   const gameSchema = {
     "@context": "https://schema.org",
