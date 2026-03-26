@@ -29,14 +29,14 @@ for (const g of onlineGames) {
   const slug = toSlug(g.title);
   if (!seen.has(slug)) {
     seen.add(slug);
-    gameEntries.push({ slug, image: g.image || null, date: TODAY });
+    gameEntries.push({ slug, title: g.title, image: g.image || null, date: null });
   }
 }
 for (const g of htmlGames) {
   const slug = toSlug(g.name);
   if (!seen.has(slug)) {
     seen.add(slug);
-    gameEntries.push({ slug, image: g.thumb4 || g.thumb3 || null, date: g.create_date || TODAY });
+    gameEntries.push({ slug, title: g.name, image: g.thumb4 || g.thumb3 || null, date: g.create_date || null });
   }
 }
 
@@ -55,14 +55,17 @@ const staticPages = [
   ...CATEGORIES.map(cat => ({ url: `${SITE_URL}/category/${cat}`, priority: "0.8", changefreq: "weekly" })),
 ];
 
-const gameUrls = gameEntries.map(({ slug, date }) =>
-  `  <url>
-    <loc>${escapeXml(`${SITE_URL}/games/${slug}`)}</loc>
-    <lastmod>${date}</lastmod>
+const gameUrls = gameEntries.map(({ slug, title, image, date }) => {
+  const imageTag = image
+    ? `\n    <image:image>\n      <image:loc>${escapeXml(image)}</image:loc>\n      <image:title>${escapeXml(title)} — Play Free Online</image:title>\n    </image:image>`
+    : "";
+  const lastmod = date ? `\n    <lastmod>${date}</lastmod>` : "";
+  return `  <url>
+    <loc>${escapeXml(`${SITE_URL}/games/${slug}`)}</loc>${lastmod}
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`
-);
+    <priority>0.7</priority>${imageTag}
+  </url>`;
+});
 
 const staticUrls = staticPages.map(({ url, priority, changefreq }) =>
   `  <url>
@@ -74,7 +77,8 @@ const staticUrls = staticPages.map(({ url, priority, changefreq }) =>
 );
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${staticUrls.join("\n")}
 ${gameUrls.join("\n")}
 </urlset>`;

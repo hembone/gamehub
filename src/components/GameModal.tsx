@@ -191,11 +191,12 @@ export function GameModal({ game }: GameModalProps) {
             <div className="overflow-x-auto py-4 -my-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               <div className="flex gap-3">
               {related.map((g) => (
-                <button
+                <a
                   key={g.slug}
-                  onClick={() => navigate({ to: "/games/$slug", params: { slug: g.slug } })}
+                  href={`/games/${g.slug}`}
+                  onClick={(e) => { e.preventDefault(); navigate({ to: "/games/$slug", params: { slug: g.slug } }); }}
                   className={`
-                    flex-shrink-0 w-[90px] text-left cursor-pointer rounded-lg overflow-hidden border transition-all duration-150
+                    flex-shrink-0 w-[90px] text-left cursor-pointer rounded-lg overflow-hidden border transition-all duration-150 no-underline
                     hover:-translate-y-0.5 hover:scale-[1.03]
                     ${isEdu ? "border-edu-border hover:border-edu-accent bg-edu-card-bg" : "border-synth-border hover:border-synth-accent bg-synth-card-bg"}
                   `}
@@ -212,7 +213,7 @@ export function GameModal({ game }: GameModalProps) {
                   <p className={`px-1.5 py-1 text-[0.55rem] font-bold truncate ${isEdu ? "text-edu-text font-edu-body" : "text-synth-text font-display"}`}>
                     {g.title}
                   </p>
-                </button>
+                </a>
               ))}
               </div>
             </div>
