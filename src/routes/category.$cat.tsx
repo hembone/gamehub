@@ -61,6 +61,15 @@ function CategoryPage() {
     "description": CATEGORY_DESCRIPTIONS[cat.id] ?? "",
     "url": `${SITE_URL}/category/${cat.id}`,
     "numberOfItems": games.length,
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": games.slice(0, 50).map((g, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "url": `${SITE_URL}/games/${g.slug}`,
+        "name": g.title,
+      })),
+    },
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [

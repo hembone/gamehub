@@ -21,8 +21,9 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
 
   const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
   return (
-    <div
-      onClick={onClick}
+    <a
+      href={`/games/${game.slug}`}
+      onClick={(e) => { e.preventDefault(); onClick(); }}
       style={style}
       className={`
         group relative border cursor-pointer overflow-hidden
@@ -88,6 +89,6 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
           {title}
         </div>
       </div>
-    </div>
+    </a>
   );
 }

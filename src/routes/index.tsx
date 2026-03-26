@@ -129,7 +129,7 @@ function IndexPage() {
         }
       `}>
         <span>
-          {isEdu ? "© 2025 FunLearn Zone — Safe & Educational" : "© 2025 ARCADE VOID — ALL RIGHTS RESERVED"}
+          {isEdu ? "© {new Date().getFullYear()} FunLearn Zone — Safe & Educational" : "© {new Date().getFullYear()} ARCADE VOID — ALL RIGHTS RESERVED"}
         </span>
         <div className="flex gap-5 flex-wrap">
           {/* Category links — static for SEO */}
@@ -140,20 +140,6 @@ function IndexPage() {
               className={`no-underline transition-colors duration-200 hover:opacity-100 ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}`}
             >
               {isEdu ? cat.eduLabel : cat.synthLabel}
-            </a>
-          ))}
-        </div>
-        <div className="flex gap-5 flex-wrap">
-          {(isEdu
-            ? [["Safety", "/safety"], ["Privacy", "/privacy"], ["Teachers", "/teachers"], ["Suggest a Game", "/suggest"]]
-            : [["DMCA", "/dmca"], ["PRIVACY", "/privacy"], ["CONTACT", "/contact"], ["REQUEST A GAME", "/suggest"]]
-          ).map(([label, href]) => (
-            <a
-              key={label}
-              href={href}
-              className={`no-underline transition-colors duration-200 hover:opacity-100 ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}`}
-            >
-              {label}
             </a>
           ))}
         </div>
