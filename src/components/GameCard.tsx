@@ -21,7 +21,7 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
       onClick={(e) => { e.preventDefault(); onClick(); }}
       style={style}
       className={`
-        group relative border cursor-pointer overflow-hidden
+        group relative block border cursor-pointer overflow-hidden
         opacity-0 animate-card-reveal
         transition-all duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]
         hover:-translate-y-1 hover:scale-[1.02]
@@ -71,13 +71,13 @@ export function GameCard({ game, onClick, style, className }: GameCardProps) {
 
       {/* Info */}
       <div className={`
-        px-3 pt-2 pb-3 border-t transition-colors duration-300
+        px-3 pt-2 pb-2 border-t transition-colors duration-300
         ${isEdu ? "border-edu-border" : "border-synth-border"}
       `}>
         <div className={`
-          text-xs font-bold mb-1 truncate transition-colors duration-300
+          text-sm font-bold mb-1 truncate transition-colors duration-300
           ${isEdu
-            ? "text-edu-text font-edu-body font-extrabold tracking-normal text-sm"
+            ? "text-edu-text font-edu-body font-extrabold tracking-normal text-base"
             : "text-synth-text font-display tracking-wide"
           }
         `}>
