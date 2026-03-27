@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-router'
 import { ThemeProvider, useTheme } from '../hooks/useTheme'
+import { PostHogProvider } from '../hooks/usePostHog'
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '../config'
 import { JsonLd } from '../components/JsonLd'
 import { reportWebVitals } from '../utils/vitals'
@@ -56,9 +57,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PHCHFR4Q" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe></noscript>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <PostHogProvider>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </PostHogProvider>
         <Scripts />
       </body>
     </html>

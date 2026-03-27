@@ -25,7 +25,7 @@ interface CategoryPillsProps {
 export function CategoryPills({ active, onChange }: CategoryPillsProps) {
   const { isEdu } = useTheme();
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const [isStuck, setIsStuck] = useState(false);
+  const [, setIsStuck] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const activeLabel = CATEGORIES.find(c => c.id === active)?.[isEdu ? "eduLabel" : "synthLabel"] ?? "All";

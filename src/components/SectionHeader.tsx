@@ -4,10 +4,9 @@ interface Props {
   title: string
   icon?: ReactNode
   isEdu: boolean
-  showSeeAll?: boolean
 }
 
-export function SectionHeader({ title, icon, isEdu, showSeeAll }: Props) {
+export function SectionHeader({ title, icon, isEdu }: Props) {
   return (
     <div className="flex items-center gap-3 mb-4">
       <span className={`
@@ -24,17 +23,6 @@ export function SectionHeader({ title, icon, isEdu, showSeeAll }: Props) {
         flex-1 h-px
         ${isEdu ? "bg-edu-border" : "bg-gradient-to-r from-synth-border via-[#00e5ff33] to-transparent shadow-[0_0_5px_rgba(0,229,255,0.15)]"}
       `} />
-      {showSeeAll && (
-        <a
-          href="#"
-          className={`
-            text-[0.68rem] opacity-75 hover:opacity-100 no-underline transition-opacity whitespace-nowrap
-            ${isEdu ? "text-edu-accent2 font-edu-body text-sm" : "text-synth-accent2 font-body"}
-          `}
-        >
-          {isEdu ? "See All →" : "SEE ALL →"}
-        </a>
-      )}
     </div>
   )
 }

@@ -26,10 +26,5 @@ export function useRecentlyPlayed() {
     })
   }, [])
 
-  const clear = useCallback(() => {
-    try { localStorage.removeItem(KEY) } catch {}
-    setSlugs([])
-  }, [])
-
-  return { slugs, add, clear }
+  return { slugs, add }
 }

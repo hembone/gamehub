@@ -10,11 +10,6 @@ interface GameCardProps {
   className?: string;
 }
 
-const BADGE_STYLES = {
-  new: { synth: "bg-synth-badge-new", edu: "bg-edu-badge-new", label: "NEW" },
-  hot: { synth: "bg-synth-badge-hot", edu: "bg-edu-badge-hot", label: "HOT" },
-  popular: { synth: "bg-synth-badge-popular", edu: "bg-edu-badge-popular", label: "TOP" },
-};
 
 export function GameCard({ game, onClick, style, className }: GameCardProps) {
   const { isEdu } = useTheme();

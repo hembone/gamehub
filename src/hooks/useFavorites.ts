@@ -27,7 +27,5 @@ export function useFavorites() {
     })
   }, [])
 
-  const isFavorite = useCallback((slug: string) => slugs.includes(slug), [slugs])
-
-  return { slugs, toggle, isFavorite }
+  return { slugs, toggle }
 }
