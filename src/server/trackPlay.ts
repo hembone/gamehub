@@ -19,21 +19,3 @@ export const trackPlay = createServerFn({ method: "POST" })
 
     return { ok: true };
   });
-
-export const getTopPlays = createServerFn({ method: "GET" })
-  .inputValidator((data: { top?: number }) => {
-    const top = Math.min(Math.max(Number(data.top) || 50, 1), 200);
-    return { top };
-  })
-  .handler(async ({ data }) => {
-    const sql = neon(process.env.DATABASE_URL!);
-
-    const plays = await sql`
-      SELECT slug, play_count
-      FROM game_plays
-      ORDER BY play_count DESC
-      LIMIT ${data.top}
-    `;
-
-    return { plays };
-  });

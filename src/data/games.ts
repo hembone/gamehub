@@ -1,5 +1,5 @@
 import type { Game } from "./gameTypes";
-export type { Game, GameCategory, GameBadge, GameSource } from "./gameTypes";
+export type { Game, GameCategory } from "./gameTypes";
 export { CATEGORIES } from "./gameTypes";
 
 import { transformOnlineGames } from "./transformOnlineGames";
@@ -27,5 +27,3 @@ const onlineGames = transformOnlineGames(rawOnline as OnlineGameRaw[]);
 const htmlGames   = transformHtmlGames(rawHtml as HtmlGameRaw[]);
 
 export const GAMES: Game[] = mergeGames(onlineGames, htmlGames);
-
-export const FEATURED_SLUG = "real-flight-simulator";
