@@ -53,6 +53,8 @@ const CATEGORIES = ["action","puzzle","match3","cards","mahjong","block","racing
 const staticPages = [
   { url: SITE_URL, priority: "1.0", changefreq: "daily" },
   ...CATEGORIES.map(cat => ({ url: `${SITE_URL}/category/${cat}`, priority: "0.8", changefreq: "weekly" })),
+  { url: `${SITE_URL}/privacy`, priority: "0.5", changefreq: "monthly" },
+  { url: `${SITE_URL}/terms`, priority: "0.5", changefreq: "monthly" },
 ];
 
 const gameUrls = gameEntries.map(({ slug, title, image, date }) => {
