@@ -3,6 +3,7 @@ import { useTheme } from "../hooks/useTheme";
 import { GAMES, CATEGORIES } from "../data/games";
 import { GameGrid } from "../components/GameGrid";
 import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
 import { JsonLd } from "../components/JsonLd";
 import { SITE_URL, SITE_NAME } from "../config";
 
@@ -100,6 +101,7 @@ function CategoryPage() {
         </div>
         <GameGrid games={games} onOpen={(slug) => navigate({ to: "/games/$slug", params: { slug } })} />
       </main>
+      <Footer />
     </>
   );
 }

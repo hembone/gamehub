@@ -1,13 +1,18 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import posthog from "posthog-js";
 import type { PostHog } from "posthog-js";
+import { useCookieConsent } from "./useCookieConsent";
 
 const PostHogContext = createContext<PostHog | null>(null);
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const [client, setClient] = useState<PostHog | null>(null);
+  const { consent } = useCookieConsent();
 
   useEffect(() => {
+    if (consent !== "all") return;
+    if (client) return;
+
     const token = import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN;
     const host = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
 
@@ -21,7 +26,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     });
 
     setClient(posthog);
-  }, []);
+  }, [consent, client]);
 
   return (
     <PostHogContext.Provider value={client}>

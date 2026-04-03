@@ -7,10 +7,11 @@ import { RecentlyPlayed } from "../components/RecentlyPlayed";
 import { SectionHeader } from "../components/SectionHeader";
 import { AdSlot } from "../components/AdSlot";
 import { BackToTop } from "../components/BackToTop";
+import { Footer } from "../components/Footer";
 import { useTheme } from "../hooks/useTheme";
 import { useRecentlyPlayed } from "../hooks/useRecentlyPlayed";
 import { useFavorites } from "../hooks/useFavorites";
-import { GAMES, CATEGORIES } from "../data/games";
+import { GAMES } from "../data/games";
 import { sessionShuffle } from "../utils/shuffle";
 import { SITE_URL } from "../config";
 
@@ -116,31 +117,7 @@ function IndexPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className={`
-        relative z-10 border-t px-6 py-5 flex items-center justify-between flex-wrap gap-4
-        text-xs opacity-60 transition-all duration-300
-        ${isEdu
-          ? "border-edu-border text-edu-text2 font-edu-body text-sm"
-          : "border-synth-border text-synth-text2 font-body"
-        }
-      `}>
-        <span>
-          {isEdu ? "© {new Date().getFullYear()} FunLearn Zone — Safe & Educational" : "© {new Date().getFullYear()} ARCADE VOID — ALL RIGHTS RESERVED"}
-        </span>
-        <div className="flex gap-5 flex-wrap">
-          {/* Category links — static for SEO */}
-          {CATEGORIES.filter(c => c.id !== "all").map(cat => (
-            <a
-              key={cat.id}
-              href={`/category/${cat.id}`}
-              className={`no-underline transition-colors duration-200 hover:opacity-100 ${isEdu ? "text-edu-text2 hover:text-edu-accent" : "text-synth-text2 hover:text-synth-accent"}`}
-            >
-              {isEdu ? cat.eduLabel : cat.synthLabel}
-            </a>
-          ))}
-        </div>
-      </footer>
+      <Footer />
 
         <BackToTop />
         <Outlet />
