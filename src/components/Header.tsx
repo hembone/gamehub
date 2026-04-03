@@ -1,14 +1,35 @@
 import { Link } from "@tanstack/react-router";
-import { Search, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { Search, EyeOff, LayoutGrid, Zap, Puzzle, Layers, CreditCard, Grid2x2, Gauge, Crosshair, Crown, Trophy, ChevronDown } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
+import { CATEGORIES } from "../data/games";
+
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
+  all:      LayoutGrid,
+  action:   Zap,
+  puzzle:   Puzzle,
+  match3:   Layers,
+  cards:    CreditCard,
+  mahjong:  Grid2x2,
+  block:    LayoutGrid,
+  racing:   Gauge,
+  shooter:  Crosshair,
+  strategy: Crown,
+  sports:   Trophy,
+};
 
 interface HeaderProps {
   search: string;
   onSearchChange: (value: string) => void;
+  activeCategory?: string;
+  onCategoryChange?: (id: string) => void;
 }
 
-export function Header({ search, onSearchChange }: HeaderProps) {
+export function Header({ search, onSearchChange, activeCategory, onCategoryChange }: HeaderProps) {
   const { toggle, isEdu } = useTheme();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const showPills = activeCategory !== undefined && onCategoryChange !== undefined;
+  const activeLabel = CATEGORIES.find(c => c.id === activeCategory)?.[isEdu ? "eduLabel" : "synthLabel"] ?? "All";
 
   const searchInput = (
     <div className="relative w-full">
@@ -101,6 +122,101 @@ export function Header({ search, onSearchChange }: HeaderProps) {
       <div className="sm:hidden pb-3">
         {searchInput}
       </div>
+
+      {/* Row 3: Category pills */}
+      {showPills && (
+        <>
+          {/* Mobile: dropdown */}
+          <div className="sm:hidden pt-4 pb-5">
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(o => !o)}
+                className={`
+                  w-full flex items-center justify-between px-4 py-2 border text-sm font-bold cursor-pointer
+                  transition-all duration-200 outline-none rounded-full
+                  ${isEdu
+                    ? "font-edu-body bg-white text-edu-text border-edu-border focus:border-edu-accent focus:ring-2 focus:ring-edu-border"
+                    : "font-display tracking-widest uppercase bg-transparent text-synth-text border-synth-border focus:border-synth-accent focus:ring-2 focus:ring-synth-border"
+                  }
+                `}
+              >
+                <span>{activeLabel}</span>
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {dropdownOpen && (
+                <div className={`
+                  absolute top-full left-0 right-0 mt-1 border rounded-2xl overflow-hidden z-50 shadow-lg
+                  ${isEdu
+                    ? "bg-edu-bg border-edu-border"
+                    : "bg-synth-surface2 border-synth-border shadow-[0_4px_24px_rgba(255,0,255,0.15)]"
+                  }
+                `}>
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => { onCategoryChange(cat.id); setDropdownOpen(false); }}
+                      className={`
+                        w-full text-left px-4 py-2.5 text-xs font-bold transition-colors duration-150 cursor-pointer
+                        ${isEdu
+                          ? `font-edu-body ${activeCategory === cat.id
+                              ? "bg-edu-accent text-white"
+                              : "text-edu-text2 hover:bg-edu-tag-bg"
+                            }`
+                          : `font-display tracking-widest uppercase ${activeCategory === cat.id
+                              ? "bg-synth-accent text-white"
+                              : "text-synth-text2 hover:bg-synth-surface2"
+                            }`
+                        }
+                      `}
+                    >
+                      {isEdu ? cat.eduLabel : cat.synthLabel}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Desktop: pills */}
+          <div className="hidden sm:flex justify-center flex-wrap gap-2 pt-4 pb-5">
+            {CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => onCategoryChange(cat.id)}
+                  className={`
+                    px-4 py-1.5 border text-xs font-bold transition-all duration-200 cursor-pointer
+                    ${isEdu
+                      ? `rounded-xl font-edu-body tracking-wide ${
+                          isActive
+                            ? "bg-edu-accent text-white border-edu-accent shadow-[0_4px_12px_rgba(49,130,206,0.3)]"
+                            : "bg-edu-tag-bg text-edu-tag-color border-edu-border hover:bg-edu-accent hover:text-white hover:border-edu-accent"
+                        }`
+                      : `rounded-full font-display tracking-widest uppercase ${
+                          isActive
+                            ? "bg-synth-accent text-white border-synth-accent shadow-[0_0_14px_#ff2dff]"
+                            : "bg-synth-tag-bg text-synth-tag-color border-synth-border hover:bg-synth-accent hover:text-white hover:border-synth-accent hover:shadow-[0_0_14px_#ff2dff]"
+                        }`
+                    }
+                  `}
+                >
+                  {isEdu ? cat.eduLabel : (
+                    <span className="inline-flex items-center gap-1.5">
+                      {(() => { const Icon = CATEGORY_ICONS[cat.id]; return Icon ? <Icon size={12} strokeWidth={2} /> : null; })()}
+                      {cat.synthLabel}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
     </header>
   );
 }
