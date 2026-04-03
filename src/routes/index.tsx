@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Outlet } from "@tanstack/react-router";
 import { useState, useMemo, useEffect } from "react";
 import { LayoutGrid } from "lucide-react";
 import { Header } from "../components/Header";
-import { CategoryPills } from "../components/CategoryPills";
 import { GameGrid } from "../components/GameGrid";
 import { RecentlyPlayed } from "../components/RecentlyPlayed";
 import { SectionHeader } from "../components/SectionHeader";
@@ -73,14 +72,12 @@ function IndexPage() {
         style={{ background: "linear-gradient(180deg,#ff2dff 0%,#ff6b35 40%,#ffcc00 100%)", filter: "blur(4px)" }}
       />
 
-      <Header search={search} onSearchChange={setSearch} />
+      <Header search={search} onSearchChange={setSearch} activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
 
       {/* Visually hidden h1 for crawlers */}
       <h1 className="sr-only">Arcade Void — Play 1,400+ Free Online Games</h1>
 
-      <main className="relative z-10 px-6 pb-16">
-
-        <CategoryPills active={activeCategory} onChange={setActiveCategory} />
+      <main className="relative z-10 px-6 pt-6 pb-16">
 
         {/* Content + Sidebar grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
