@@ -118,7 +118,6 @@ function IndexPage() {
       </main>
 
       <Footer />
-
         <BackToTop />
         <Outlet />
       </>
