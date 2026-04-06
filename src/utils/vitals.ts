@@ -33,8 +33,14 @@ function report({ name, value }: { name: string; value: number }) {
     `color:${r === "good" ? "#4ade80" : r === "needs-improvement" ? "#fb923c" : "#f87171"}`,
   );
 
-  // Hook your analytics here, e.g.:
-  // gtag("event", name, { value: Math.round(name === "CLS" ? value * 1000 : value), event_category: "Web Vitals", event_label: id, non_interaction: true });
+  if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+    (window as any).gtag("event", name, {
+      value: Math.round(name === "CLS" ? value * 1000 : value),
+      event_category: "Web Vitals",
+      event_label: r,
+      non_interaction: true,
+    });
+  }
 }
 
 export function reportWebVitals() {
