@@ -11,6 +11,7 @@ import type { OnlineGameRaw } from "../src/data/transformOnlineGames";
 import type { HtmlGameRaw } from "../src/data/transformHtmlGames";
 import type { Game } from "../src/data/gameTypes";
 
+import { BLACKLIST } from "../src/data/blacklist";
 import rawOnline from "../src/data/gamesRaw.json";
 import rawHtml from "../src/data/htmlGamesRaw.json";
 
@@ -28,9 +29,11 @@ function mergeGames(...sources: Game[][]): Game[] {
 
 const onlineGames = transformOnlineGames(rawOnline as OnlineGameRaw[]);
 const htmlGames = transformHtmlGames(rawHtml as HtmlGameRaw[]);
-const games = mergeGames(onlineGames, htmlGames);
+const allGames = mergeGames(onlineGames, htmlGames);
+const games = allGames.filter((g) => !BLACKLIST.has(g.slug));
 
 const outPath = resolve(import.meta.dirname, "../public/games.json");
 writeFileSync(outPath, JSON.stringify(games));
 
-console.log(`wrote ${games.length} games to public/games.json (${(Buffer.byteLength(JSON.stringify(games)) / 1024).toFixed(0)} KB)`);
+const removed = allGames.length - games.length;
+console.log(`wrote ${games.length} games to public/games.json (${(Buffer.byteLength(JSON.stringify(games)) / 1024).toFixed(0)} KB)${removed > 0 ? ` — ${removed} blacklisted` : ""}`);
