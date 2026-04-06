@@ -145,7 +145,7 @@ function PrivacyPage() {
           <h2 className={heading}>Contact</h2>
           <p>
             If you have questions about this Privacy Policy, you can contact us at{" "}
-            <a href="mailto:contact@arcadevoid.games" className={link}>contact@arcadevoid.games</a>.
+            <a href="mailto:support@arcadevoid.games" className={link}>support@arcadevoid.games</a>.
           </p>
         </div>
       </main>
