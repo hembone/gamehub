@@ -1,46 +1,45 @@
 /**
  * Generates /public/sitemap.xml from both raw game JSON sources.
- * Run with: node scripts/generate-sitemap.mjs
+ * Run with: tsx scripts/generate-sitemap.ts
  */
 
 import { readFileSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { resolve } from "path";
+import { BLACKLIST } from "../src/data/blacklist";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, "..");
+const root = resolve(import.meta.dirname, "..");
 
 const SITE_URL = "https://arcadevoid.games";
 const TODAY = new Date().toISOString().split("T")[0];
 
-function toSlug(title) {
+function toSlug(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 // Load both sources
-const onlineGames = JSON.parse(readFileSync(join(root, "src/data/gamesRaw.json"), "utf8"));
-const htmlGames   = JSON.parse(readFileSync(join(root, "src/data/htmlGamesRaw.json"), "utf8"));
+const onlineGames = JSON.parse(readFileSync(resolve(root, "src/data/gamesRaw.json"), "utf8"));
+const htmlGames   = JSON.parse(readFileSync(resolve(root, "src/data/htmlGamesRaw.json"), "utf8"));
 
-// Build deduplicated slug set (onlinegames wins on collision)
-const seen = new Set();
-const gameEntries = [];
+// Build deduplicated slug set (onlinegames wins on collision), filtering blacklist
+const seen = new Set<string>();
+const gameEntries: { slug: string; title: string; image: string | null; date: string | null }[] = [];
 
 for (const g of onlineGames) {
   const slug = toSlug(g.title);
-  if (!seen.has(slug)) {
+  if (!seen.has(slug) && !BLACKLIST.has(slug)) {
     seen.add(slug);
     gameEntries.push({ slug, title: g.title, image: g.image || null, date: null });
   }
 }
 for (const g of htmlGames) {
   const slug = toSlug(g.name);
-  if (!seen.has(slug)) {
+  if (!seen.has(slug) && !BLACKLIST.has(slug)) {
     seen.add(slug);
     gameEntries.push({ slug, title: g.name, image: g.thumb4 || g.thumb3 || null, date: g.create_date || null });
   }
 }
 
-function escapeXml(str) {
+function escapeXml(str: string) {
   return str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -85,7 +84,7 @@ ${staticUrls.join("\n")}
 ${gameUrls.join("\n")}
 </urlset>`;
 
-const outPath = join(root, "public/sitemap.xml");
+const outPath = resolve(root, "public/sitemap.xml");
 writeFileSync(outPath, xml, "utf8");
 
 console.log(`✓ Sitemap written to public/sitemap.xml`);
