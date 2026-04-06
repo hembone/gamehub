@@ -5,7 +5,6 @@ import { Header } from "../components/Header";
 import { GameGrid } from "../components/GameGrid";
 import { RecentlyPlayed } from "../components/RecentlyPlayed";
 import { SectionHeader } from "../components/SectionHeader";
-import { AdSlot } from "../components/AdSlot";
 import { BackToTop } from "../components/BackToTop";
 import { Footer } from "../components/Footer";
 import { useTheme } from "../hooks/useTheme";
@@ -16,15 +15,7 @@ import type { Game } from "../data/games";
 import { sessionShuffle } from "../utils/shuffle";
 import { SITE_URL } from "../config";
 
-const ADSENSE_CLIENT      = "ca-pub-3744119325664696";
-const AD_SLOT_SIDEBAR_TOP = "8273201368";
-const AD_SLOT_SIDEBAR_MID = "6398547769";
-
 export const Route = createFileRoute("/")({
-  loader: async () => {
-    const games = await getGames();
-    return { games };
-  },
   head: () => ({
     links: [{ rel: "canonical", href: SITE_URL + "/" }],
   }),
@@ -33,11 +24,15 @@ export const Route = createFileRoute("/")({
 
 
 function IndexPage() {
-  const { games } = Route.useLoaderData();
   const navigate = useNavigate();
   const { isEdu } = useTheme();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    getGames().then(setGames);
+  }, []);
 
   const { slugs: recentSlugs, add: addRecent } = useRecentlyPlayed();
   const { slugs: favSlugs, toggle: toggleFavorite } = useFavorites();
@@ -46,10 +41,10 @@ function IndexPage() {
     [recentSlugs, games]
   );
 
-  const [shuffledGames, setShuffledGames] = useState(games);
+  const [shuffledGames, setShuffledGames] = useState<Game[]>([]);
 
   useEffect(() => {
-    setShuffledGames(sessionShuffle(games));
+    if (games.length > 0) setShuffledGames(sessionShuffle(games));
   }, [games]);
 
   const filteredGames = useMemo(() => {
@@ -86,41 +81,27 @@ function IndexPage() {
 
       <main className="relative z-10 px-6 pt-6 pb-16">
 
-        {/* Content + Sidebar grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
-
-          {/* Main column */}
-          <div className="min-w-0">
-            <RecentlyPlayed games={recentGames} onOpen={openGame} favoriteslugs={favSlugs} onToggleFavorite={toggleFavorite} />
-            <section className="mb-10">
-              <SectionHeader
-                title={isFiltered
-                  ? `${filteredGames.length} ${isEdu ? "Games Found" : "GAMES FOUND"}`
-                  : isEdu ? "🎮 All Games" : "ALL GAMES"
-                }
-                icon={!isFiltered ? <LayoutGrid size={14} /> : undefined}
-                isEdu={isEdu}
-              />
-              {filteredGames.length === 0 ? (
-                <div className={`
-                  text-center py-12 text-sm
-                  ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
-                `}>
-                  {isEdu ? "😕 No games found. Try a different search!" : "NO RESULTS FOUND. TRY ANOTHER SEARCH."}
-                </div>
-              ) : (
-                <GameGrid games={filteredGames} onOpen={openGame} />
-              )}
-            </section>
-          </div>
-
-          {/* Sticky sidebar */}
-          <aside className="hidden lg:flex flex-col gap-5 sticky top-20 pt-12">
-            <AdSlot slotId={AD_SLOT_SIDEBAR_TOP} clientId={ADSENSE_CLIENT} />
-            <AdSlot slotId={AD_SLOT_SIDEBAR_MID} clientId={ADSENSE_CLIENT} />
-          </aside>
-
-        </div>
+        <RecentlyPlayed games={recentGames} onOpen={openGame} favoriteslugs={favSlugs} onToggleFavorite={toggleFavorite} />
+        <section className="mb-10">
+          <SectionHeader
+            title={isFiltered
+              ? `${filteredGames.length} ${isEdu ? "Games Found" : "GAMES FOUND"}`
+              : isEdu ? "🎮 All Games" : "ALL GAMES"
+            }
+            icon={!isFiltered ? <LayoutGrid size={14} /> : undefined}
+            isEdu={isEdu}
+          />
+          {filteredGames.length === 0 ? (
+            <div className={`
+              text-center py-12 text-sm
+              ${isEdu ? "text-edu-text2 font-edu-body" : "text-synth-text2 font-body"}
+            `}>
+              {isEdu ? "😕 No games found. Try a different search!" : "NO RESULTS FOUND. TRY ANOTHER SEARCH."}
+            </div>
+          ) : (
+            <GameGrid games={filteredGames} onOpen={openGame} />
+          )}
+        </section>
       </main>
 
       <Footer />

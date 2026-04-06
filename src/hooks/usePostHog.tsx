@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import posthog from "posthog-js";
 import type { PostHog } from "posthog-js";
 import { useCookieConsent } from "./useCookieConsent";
@@ -33,8 +33,4 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       {children}
     </PostHogContext.Provider>
   );
-}
-
-export function usePostHog() {
-  return useContext(PostHogContext);
 }

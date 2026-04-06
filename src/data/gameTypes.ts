@@ -10,9 +10,9 @@ export type GameCategory =
   | "strategy"
   | "sports";
 
-export type GameBadge = "new" | "hot" | "popular";
+type GameBadge = "new" | "hot" | "popular";
 
-export type GameSource = "onlinegames" | "htmlgames";
+type GameSource = "onlinegames" | "htmlgames";
 
 export interface Game {
   slug: string;
