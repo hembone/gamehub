@@ -19,14 +19,15 @@ export function GameModal({ game, related }: GameModalProps) {
   const category = isEdu && game.eduCategory ? game.eduCategory : game.category;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [expanded, setExpanded] = useState(() => window.innerWidth < 640);
-  const [fullscreen, setFullscreen] = useState(false);
+  const isMobile = window.innerWidth < 640;
+  const [expanded, setExpanded] = useState(() => isMobile);
+  const [fullscreen, setFullscreen] = useState(() => isMobile);
   const close = () => navigate({ to: "/" });
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (fullscreen) setFullscreen(false);
+        if (fullscreen && !isMobile) setFullscreen(false);
         else close();
       }
     };
@@ -50,13 +51,23 @@ export function GameModal({ game, related }: GameModalProps) {
           allow="fullscreen; gamepad"
           sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock"
         />
-        <button
-          onClick={() => setFullscreen(false)}
-          aria-label="Exit fullscreen"
-          className="fixed top-4 right-4 z-[520] w-10 h-10 flex items-center justify-center rounded-lg bg-black/70 border border-white/20 text-white hover:bg-black/90 hover:border-white/40 cursor-pointer transition-all duration-200"
-        >
-          <Minimize2 size={18} />
-        </button>
+        {isMobile ? (
+          <button
+            onClick={close}
+            aria-label="Close game"
+            className="fixed top-4 right-4 z-[520] w-10 h-10 flex items-center justify-center rounded-lg bg-black/70 border border-white/20 text-white hover:bg-black/90 hover:border-white/40 cursor-pointer transition-all duration-200"
+          >
+            <X size={18} />
+          </button>
+        ) : (
+          <button
+            onClick={() => setFullscreen(false)}
+            aria-label="Exit fullscreen"
+            className="fixed top-4 right-4 z-[520] w-10 h-10 flex items-center justify-center rounded-lg bg-black/70 border border-white/20 text-white hover:bg-black/90 hover:border-white/40 cursor-pointer transition-all duration-200"
+          >
+            <Minimize2 size={18} />
+          </button>
+        )}
       </div>
     );
   }

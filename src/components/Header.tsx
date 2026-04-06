@@ -127,16 +127,16 @@ export function Header({ search, onSearchChange, activeCategory, onCategoryChang
       {showPills && (
         <>
           {/* Mobile: dropdown */}
-          <div className="sm:hidden pt-4 pb-5">
+          <div className="sm:hidden pt-1 pb-5">
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(o => !o)}
                 className={`
-                  w-full flex items-center justify-between px-4 py-2 border text-sm font-bold cursor-pointer
+                  w-full flex items-center justify-between px-4 py-2 border-2 text-sm font-bold cursor-pointer
                   transition-all duration-200 outline-none rounded-full
                   ${isEdu
                     ? "font-edu-body bg-white text-edu-text border-edu-border focus:border-edu-accent focus:ring-2 focus:ring-edu-border"
-                    : "font-display tracking-widest uppercase bg-transparent text-synth-text border-synth-border focus:border-synth-accent focus:ring-2 focus:ring-synth-border"
+                    : "font-display tracking-widest uppercase bg-transparent text-synth-text border-synth-text2/40 focus:border-synth-accent focus:ring-2 focus:ring-synth-border"
                   }
                 `}
               >
