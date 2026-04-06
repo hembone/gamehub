@@ -27,6 +27,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("arcade-theme", theme);
+
+    // Lazy-load edu fonts only when edu theme is activated
+    if (theme === "edu") {
+      const id = "edu-fonts";
+      if (!document.getElementById(id)) {
+        const link = document.createElement("link");
+        link.id = id;
+        link.rel = "stylesheet";
+        link.href = "https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Fredoka+One&display=swap&subset=latin";
+        document.head.appendChild(link);
+      }
+    }
   }, [theme]);
 
   const toggle = () => setTheme((t) => (t === "synthwave" ? "edu" : "synthwave"));

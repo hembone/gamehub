@@ -2,15 +2,19 @@ import { useEffect } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { GameModal } from "../components/GameModal";
 import { JsonLd } from "../components/JsonLd";
-import { GAMES } from "../data/games";
+import { getGames } from "../data/games";
 import { SITE_URL, SITE_NAME } from "../config";
 import { trackPlay } from "../server/trackPlay";
 
 export const Route = createFileRoute("/games/$slug")({
-  loader: ({ params }) => {
-    const game = GAMES.find((g) => g.slug === params.slug);
+  loader: async ({ params }) => {
+    const games = await getGames();
+    const game = games.find((g) => g.slug === params.slug);
     if (!game) throw notFound();
-    return { game };
+    const related = games
+      .filter((g) => g.category === game.category && g.slug !== game.slug)
+      .slice(0, 8);
+    return { game, related };
   },
   head: ({ loaderData }) => {
     if (!loaderData?.game) return {};
@@ -48,7 +52,7 @@ export const Route = createFileRoute("/games/$slug")({
 });
 
 function GameModalRoute() {
-  const { game } = Route.useLoaderData();
+  const { game, related } = Route.useLoaderData();
 
   useEffect(() => {
     trackPlay({ data: { slug: game.slug } }).catch(() => {});
@@ -77,7 +81,7 @@ function GameModalRoute() {
     <>
       <JsonLd data={gameSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <GameModal game={game} />
+      <GameModal game={game} related={related} />
     </>
   );
 }

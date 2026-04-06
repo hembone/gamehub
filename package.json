@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
+    "prebuild": "npx tsx scripts/build-games.ts",
     "build": "npm run sitemap && vite build",
     "serve": "vite preview",
     "test": "vitest run",

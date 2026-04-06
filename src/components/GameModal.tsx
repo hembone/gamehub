@@ -4,20 +4,16 @@ import { X, Maximize2 } from "lucide-react";
 import { CategoryIcon } from "./CategoryIcon";
 import { AdSlot } from "./AdSlot";
 import { useTheme } from "../hooks/useTheme";
-import { GAMES } from "../data/games";
 import type { Game } from "../data/games";
 
 interface GameModalProps {
   game: Game;
+  related: Game[];
 }
 
-export function GameModal({ game }: GameModalProps) {
+export function GameModal({ game, related }: GameModalProps) {
   const navigate = useNavigate();
   const { isEdu } = useTheme();
-
-  const related = GAMES
-    .filter((g) => g.category === game.category && g.slug !== game.slug)
-    .slice(0, 8);
 
   const title = isEdu && game.eduTitle ? game.eduTitle : game.title;
   const description = isEdu && game.eduDescription ? game.eduDescription : game.description;
