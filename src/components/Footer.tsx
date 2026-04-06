@@ -8,7 +8,7 @@ export function Footer() {
 
   return (
     <footer className={`
-      sticky bottom-0 z-10 border-t px-6 py-2 flex items-center justify-between flex-wrap gap-4
+      sm:sticky bottom-0 z-10 border-t px-6 py-2 flex items-center justify-between flex-wrap gap-4
       text-xs opacity-60 transition-all duration-300
       ${isEdu
         ? "border-edu-border text-edu-text2 font-edu-body text-sm bg-edu-bg"
