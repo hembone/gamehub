@@ -8,7 +8,7 @@
     "build": "npm run sitemap && vite build",
     "serve": "vite preview",
     "test": "vitest run",
-    "sitemap": "node scripts/generate-sitemap.mjs"
+    "sitemap": "tsx scripts/generate-sitemap.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
