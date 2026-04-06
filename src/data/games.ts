@@ -8,13 +8,11 @@ export async function getGames(): Promise<Game[]> {
   if (cached) return cached;
 
   if (typeof window === "undefined") {
-    // Server: read directly from disk
-    const { readFileSync } = await import("node:fs");
-    const { resolve } = await import("node:path");
-    const filePath = resolve(import.meta.dirname, "../../public/games.json");
-    cached = JSON.parse(readFileSync(filePath, "utf-8")) as Game[];
+    // Server: dynamic import bundles JSON into server chunk only
+    const mod = await import("../../public/games.json");
+    cached = (mod.default ?? mod) as Game[];
   } else {
-    // Client: fetch from static asset
+    // Client: fetch from CDN-served static asset
     const res = await fetch("/games.json");
     cached = (await res.json()) as Game[];
   }
