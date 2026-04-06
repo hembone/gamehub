@@ -11,7 +11,8 @@ import { Footer } from "../components/Footer";
 import { useTheme } from "../hooks/useTheme";
 import { useRecentlyPlayed } from "../hooks/useRecentlyPlayed";
 import { useFavorites } from "../hooks/useFavorites";
-import { GAMES } from "../data/games";
+import { getGames } from "../data/games";
+import type { Game } from "../data/games";
 import { sessionShuffle } from "../utils/shuffle";
 import { SITE_URL } from "../config";
 
@@ -20,6 +21,10 @@ const AD_SLOT_SIDEBAR_TOP = "8273201368";
 const AD_SLOT_SIDEBAR_MID = "6398547769";
 
 export const Route = createFileRoute("/")({
+  loader: async () => {
+    const games = await getGames();
+    return { games };
+  },
   head: () => ({
     links: [{ rel: "canonical", href: SITE_URL + "/" }],
   }),
@@ -28,6 +33,7 @@ export const Route = createFileRoute("/")({
 
 
 function IndexPage() {
+  const { games } = Route.useLoaderData();
   const navigate = useNavigate();
   const { isEdu } = useTheme();
   const [search, setSearch] = useState("");
@@ -36,15 +42,15 @@ function IndexPage() {
   const { slugs: recentSlugs, add: addRecent } = useRecentlyPlayed();
   const { slugs: favSlugs, toggle: toggleFavorite } = useFavorites();
   const recentGames = useMemo(
-    () => recentSlugs.map(s => GAMES.find(g => g.slug === s)).filter(Boolean) as typeof GAMES,
-    [recentSlugs]
+    () => recentSlugs.map(s => games.find(g => g.slug === s)).filter(Boolean) as Game[],
+    [recentSlugs, games]
   );
 
-  const [shuffledGames, setShuffledGames] = useState(GAMES);
+  const [shuffledGames, setShuffledGames] = useState(games);
 
   useEffect(() => {
-    setShuffledGames(sessionShuffle(GAMES));
-  }, []);
+    setShuffledGames(sessionShuffle(games));
+  }, [games]);
 
   const filteredGames = useMemo(() => {
     return shuffledGames.filter((game) => {
@@ -53,7 +59,7 @@ function IndexPage() {
       const matchesCategory = activeCategory === "all" || game.category === activeCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [search, activeCategory, isEdu]);
+  }, [search, activeCategory, isEdu, shuffledGames]);
 
   const isFiltered = search.length > 0 || activeCategory !== "all";
 

@@ -2,28 +2,20 @@ import type { Game } from "./gameTypes";
 export type { Game, GameCategory } from "./gameTypes";
 export { CATEGORIES } from "./gameTypes";
 
-import { transformOnlineGames } from "./transformOnlineGames";
-import { transformHtmlGames }   from "./transformHtmlGames";
+let cached: Game[] | null = null;
 
-import rawOnline from "./gamesRaw.json";
-import rawHtml   from "./htmlGamesRaw.json";
+export async function getGames(): Promise<Game[]> {
+  if (cached) return cached;
 
-import type { OnlineGameRaw } from "./transformOnlineGames";
-import type { HtmlGameRaw }   from "./transformHtmlGames";
-
-function mergeGames(...sources: Game[][]): Game[] {
-  const seen = new Map<string, Game>();
-  for (const list of sources) {
-    for (const game of list) {
-      if (!seen.has(game.slug)) {
-        seen.set(game.slug, game);
-      }
-    }
+  if (typeof window === "undefined") {
+    // Server: dynamic import bundles JSON into server chunk only
+    const mod = await import("../../public/games.json");
+    cached = (mod.default ?? mod) as Game[];
+  } else {
+    // Client: fetch from CDN-served static asset
+    const res = await fetch("/games.json");
+    cached = (await res.json()) as Game[];
   }
-  return Array.from(seen.values());
+
+  return cached;
 }
-
-const onlineGames = transformOnlineGames(rawOnline as OnlineGameRaw[]);
-const htmlGames   = transformHtmlGames(rawHtml as HtmlGameRaw[]);
-
-export const GAMES: Game[] = mergeGames(onlineGames, htmlGames);

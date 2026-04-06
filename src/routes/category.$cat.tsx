@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, Link, useNavigate } from "@tanstack/react-router";
 import { useTheme } from "../hooks/useTheme";
-import { GAMES, CATEGORIES } from "../data/games";
+import { getGames, CATEGORIES } from "../data/games";
 import { GameGrid } from "../components/GameGrid";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
@@ -21,10 +21,11 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
 };
 
 export const Route = createFileRoute("/category/$cat")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const cat = CATEGORIES.find((c) => c.id === params.cat && c.id !== "all");
     if (!cat) throw notFound();
-    const games = GAMES.filter((g) => g.category === params.cat);
+    const allGames = await getGames();
+    const games = allGames.filter((g) => g.category === params.cat);
     return { cat, games };
   },
   head: ({ loaderData }) => {
