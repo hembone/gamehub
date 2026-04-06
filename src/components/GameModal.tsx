@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { X, Maximize2 } from "lucide-react";
+import { X, Maximize2, Minimize2 } from "lucide-react";
 import { CategoryIcon } from "./CategoryIcon";
-import { AdSlot } from "./AdSlot";
 import { useTheme } from "../hooks/useTheme";
 import type { Game } from "../data/games";
 
@@ -21,18 +20,46 @@ export function GameModal({ game, related }: GameModalProps) {
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [expanded, setExpanded] = useState(() => window.innerWidth < 640);
+  const [fullscreen, setFullscreen] = useState(false);
   const close = () => navigate({ to: "/" });
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (fullscreen) setFullscreen(false);
+        else close();
+      }
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [fullscreen]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
   }, []);
+
+  if (fullscreen) {
+    return (
+      <div className="fixed inset-0 z-[500] bg-black">
+        <iframe
+          ref={iframeRef}
+          className="w-full h-full block border-none"
+          src={game.iframeUrl}
+          title={title}
+          allow="fullscreen; gamepad"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock"
+        />
+        <button
+          onClick={() => setFullscreen(false)}
+          aria-label="Exit fullscreen"
+          className="fixed top-4 right-4 z-[520] w-10 h-10 flex items-center justify-center rounded-lg bg-black/70 border border-white/20 text-white hover:bg-black/90 hover:border-white/40 cursor-pointer transition-all duration-200"
+        >
+          <Minimize2 size={18} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[500] h-screen w-screen animate-fade-in">
@@ -42,30 +69,10 @@ export function GameModal({ game, related }: GameModalProps) {
         onClick={close}
       />
 
-      {/* 3-column layout */}
       <div className={`
         relative z-[510] h-screen
-        grid grid-cols-1 xl:grid-cols-[160px_1fr_160px] 2xl:grid-cols-[300px_1fr_300px]
+        grid grid-cols-1
       `}>
-        {/* Left ad column */}
-        <div
-          className="hidden xl:flex items-center justify-center"
-          style={isEdu ? { background: 'rgba(240,247,255,0.92)' } : {
-            background: '#0d0015',
-            backgroundImage: `
-              repeating-linear-gradient(0deg, rgba(0,229,255,0.05) 0px, transparent 1px, transparent 60px, rgba(0,229,255,0.05) 61px),
-              repeating-linear-gradient(90deg, rgba(255,0,255,0.06) 0px, transparent 1px, transparent 60px, rgba(255,0,255,0.06) 61px)
-            `,
-          }}
-        >
-          {!isEdu && (
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full opacity-10 pointer-events-none"
-              style={{ background: 'linear-gradient(180deg,#ff2dff 0%,#ff6b35 40%,#ffcc00 100%)', filter: 'blur(30px)' }} />
-          )}
-          <AdSlot slotId="9586283030" clientId="ca-pub-3744119325664696" />
-        </div>
-
-        {/* Center column — modal */}
         <div className={`
           flex items-center justify-center h-screen min-h-0 overflow-hidden
           ${expanded ? "" : "p-6"}
@@ -152,7 +159,7 @@ export function GameModal({ game, related }: GameModalProps) {
           </p>
           <div className="hidden sm:flex gap-2 flex-shrink-0">
             <button
-              onClick={() => setExpanded(v => !v)}
+              onClick={() => setFullscreen(true)}
               className={`
                 inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold border rounded-lg cursor-pointer transition-all duration-200
                 ${isEdu
@@ -217,24 +224,6 @@ export function GameModal({ game, related }: GameModalProps) {
         )}
       </div>
       </div>
-
-        {/* Right ad column */}
-        <div
-          className="hidden xl:flex items-center justify-center"
-          style={isEdu ? { background: 'rgba(240,247,255,0.92)' } : {
-            background: '#0d0015',
-            backgroundImage: `
-              repeating-linear-gradient(0deg, rgba(0,229,255,0.05) 0px, transparent 1px, transparent 60px, rgba(0,229,255,0.05) 61px),
-              repeating-linear-gradient(90deg, rgba(255,0,255,0.06) 0px, transparent 1px, transparent 60px, rgba(255,0,255,0.06) 61px)
-            `,
-          }}
-        >
-          {!isEdu && (
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full opacity-10 pointer-events-none"
-              style={{ background: 'linear-gradient(180deg,#ff2dff 0%,#ff6b35 40%,#ffcc00 100%)', filter: 'blur(30px)' }} />
-          )}
-          <AdSlot slotId="9586283030" clientId="ca-pub-3744119325664696" />
-        </div>
       </div>
     </div>
   );

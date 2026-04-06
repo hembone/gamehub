@@ -2,7 +2,7 @@ import { Clock, Star } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import { GameCard } from './GameCard'
 import { SectionHeader } from './SectionHeader'
-import type { Game } from '../data/gameTypes'
+import type { Game } from '../data/games'
 
 interface Props {
   games: Game[]
